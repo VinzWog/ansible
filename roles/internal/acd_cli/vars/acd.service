@@ -1,0 +1,16 @@
+[Unit]
+Description=user Amazon Cloud Drive FUSE mount
+Documentation=https://acd-cli.readthedocs.org/en/latest/
+AssertPathIsDirectory={{ ACD_MOUNTPOINT }}
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ ACD_USER }}
+Group={{ ACD_GROUP }}
+ExecStart={{ ACD_INSTALL_PATH }}/bin/acd_cli mount --umask 0022 --foreground --interval 60 --allow-other {{ ACD_MOUNTPOINT }}
+ExecStop={{ ACD_INSTALL_PATH }}/bin/acd_cli -v -nl umount {{ ACD_MOUNTPOINT }}
+Restart=on-abort
+
+[Install]
+WantedBy=default.target

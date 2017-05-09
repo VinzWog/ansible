@@ -1,0 +1,14 @@
+#####
+# Variables for plex_server role
+#####
+
+
+PLEX_DEB_REPO: deb https://downloads.plex.tv/repo/deb/ public main
+PLEX_DEB_REPO_KEY: https://downloads.plex.tv/plex-keys/PlexSign.key
+PLEX_DEB_URL: https://downloads.plex.tv/plex-media-server/1.5.5.3634-995f1dead/plexmediaserver_1.5.5.3634-995f1dead_amd64.deb
+
+PLEX_RPM_REPO: https://downloads.plex.tv/repo/rpm/$basearch/
+PLEX_RPM_REPO_KEY: https://downloads.plex.tv/plex-keys/PlexSign.key
+
+PLEX_CONF_BACKUP: /home/vinz/PMS.tgz
+PLEX_CONF_PATH: /var/lib/plexmediaserver/Library/Application Support/

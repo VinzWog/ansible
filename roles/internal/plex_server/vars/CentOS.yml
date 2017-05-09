@@ -1,0 +1,7 @@
+#####
+# Variables for CentOS hosts
+#####
+
+BASIC_PACKAGES:
+ - man
+ - vim

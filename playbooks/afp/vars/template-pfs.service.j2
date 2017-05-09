@@ -1,0 +1,15 @@
+[Unit]
+Description=pCloud pfs mount
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User={{ DELUGE_USER }}
+Group={{ DELUGE_USER }}
+RemainAfterExit=yes
+ExecStart=/usr/bin/mount.pfs --auth IDENTIFICATION_TOKEN {{ PFS_MOUNT_DIRECTORY }}
+ExecStop=/usr/bin/umount {{ PFS_MOUNT_DIRECTORY }}
+
+[Install]
+WantedBy=multi-user.target

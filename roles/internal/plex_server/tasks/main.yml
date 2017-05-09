@@ -1,0 +1,14 @@
+#####
+# Main task file for plex_server role
+#####
+
+- name: Include common variables
+  include_vars: vars-common.yml
+
+- debug:
+    msg: '====| PLAY : deploy_packages |===='
+- include: deploy_packages.yml
+
+#- debug:
+#    msg: '====| PLAY : configure_plex |===='
+#- include: configure_plex.yml

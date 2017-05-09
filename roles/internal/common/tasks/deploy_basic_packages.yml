@@ -1,0 +1,21 @@
+#####
+# Tasks to deploy_basic_packages
+#####
+
+- block:
+  - name: Include variables depending of distribution
+    include_vars: "{{ ansible_distribution }}.yml"   
+
+  - name: Update cache if needed (> 1h)
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600     
+
+  - name: Install basic packages
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items: "{{ BASIC_PACKAGES }}"
+
+  become: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

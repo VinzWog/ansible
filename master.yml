@@ -1,0 +1,8 @@
+- hosts: plex
+  roles:
+    - common
+    - acd_cli
+    - plex_server
+
+
+
