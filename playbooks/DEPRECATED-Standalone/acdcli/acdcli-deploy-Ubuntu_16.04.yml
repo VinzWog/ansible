@@ -1,0 +1,90 @@
+# ansible-playbook ./acdcli-deploy-Ubuntu_16.04.yml --extra-vars "target=host" --ask-vault-pass --ask-become-pass 
+
+############
+#PREREQUESITE
+############
+# Visit https://tensile-runway-92512.appspot.com
+# Sign in with Amazon account
+# Authorize the application and place the downloaded oauth_data in ./vars/ prior to running the role
+## If token is expired, it can be renew with :
+# curl https://tensile-runway-92512.appspot.com/ -d "refresh_token=$(grep refresh ~/.cache/acd_cli/oauth_data | cut -d'"' -f4)" | tee ~/.cache/acd_cli/oauth_data
+### Credits :
+# https://github.com/jfouchard/ansible-role-acd-cli/blob/master/tasks/main.yml
+###
+
+- hosts: "{{ target }}"
+
+  remote_user: vinz
+
+  vars:
+     ACD_USER: vinz
+     ACD_GROUP: "{{ ACD_USER }}" 
+     ACD_INSTALL_PATH: /usr/local/acdcli
+     ACD_MOUNTPOINT: /home/{{ ACD_USER }}/AC-Drive
+    
+  tasks:
+#  - name: Load vault
+#    include_vars: vars/vault-acdcli.yml
+#    no_log: true
+
+  - name: Install required packages
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+        - python3-venv
+        - python3-pip
+        - git
+        - fuse
+    become: yes
+
+  - name: Install acdcli using pip
+    pip:
+      name: "git+https://github.com/yadayada/acd_cli.git"
+      editable: false
+      extra_args: '--upgrade'
+      virtualenv_command: pyvenv-3.5 
+      virtualenv: "{{ ACD_INSTALL_PATH }}" 
+    become: yes
+
+  - name: Create ACD cache directory
+    file:
+      path: ~/.cache/acd_cli
+      state: directory
+      recurse: yes
+
+  - name: Install OAuth file
+    copy:
+      src: vars/oauth_data
+      dest: ~/.cache/acd_cli/oauth_data
+      force: no
+
+  - name: Perform initial sync
+    command: "{{ ACD_INSTALL_PATH }}/bin/acdcli sync"
+    args:
+      creates: ~/.cache/acd_cli/nodes.db
+
+  - name: Create ACD mountpoint
+    file:
+      path: "{{ ACD_MOUNTPOINT }}"
+      state: directory
+      recurse: yes
+
+  - name: Create User SystemD directory
+    file:
+      path: ~/.config/systemd/user
+      state: directory
+      recurse: yes
+  
+  - name: Install SystemD unit file
+    template:
+      src: vars/acd.service
+      dest: ~/.config/systemd/user/acd.service
+
+  - name: SystemD Daemon reload and start
+    systemd:
+      name: acd.service
+      state: started
+      enabled: yes
+      user: yes
+      daemon_reload: yes

@@ -1,0 +1,15 @@
+#####
+# Main task file for generic role
+#####
+
+- name: Load vault
+  include_vars: vault-generic.yml
+  no_log: true
+
+- debug:
+    msg: '====| PLAY : configure_user_access |===='
+- include: configure_user_access.yml
+
+- debug:
+    msg: '====| PLAY : deploy_basic_packages |===='
+- include: deploy_basic_packages.yml

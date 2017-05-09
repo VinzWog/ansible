@@ -1,0 +1,39 @@
+- hosts: "{{ target }}"
+
+  remote_user: vinz
+  become: yes
+
+  vars:
+    WOGNET_PLEX_FILE_DIR: vars
+    WOGNET_PLEX_DEB_DOWNLOAD_URL: https://downloads.plex.tv/plex-media-server/1.0.3.2461-35f0caa/plexmediaserver_1.0.3.2461-35f0caa_amd64.deb
+    WOGNET_PLEX_DEB_DOWNLOAD_TARGET: /tmp/plex.deb
+    WOGNET_PLEX_CONF_PATH: /home/vinz/PMS.tgz
+
+## TO DO ##
+# Open plex ports on firewall
+# 32400
+
+  tasks:
+  - name: Load vault
+    include_vars: vars/vault-plex.yml
+    no_log: true
+
+  - name: Install Plex required packages
+    apt: name={{ item }} state=latest
+    with_items:
+        - vim
+
+  - name: Install Plex .deb package from plex website
+    apt: deb="{{ WOGNET_PLEX_DEB_DOWNLOAD_URL }}"
+
+  - name: Stop Plex service
+    systemd: name=plexmediaserver state=stopped
+
+  - name: Copy and extract configured Plex archive
+    unarchive: src="{{ WOGNET_PLEX_CONF_PATH }}"
+               dest="/var/lib/plexmediaserver/Library/Application Support/"
+               owner=plex group=plex
+
+  - name: Start Plex service
+    systemd: name=plexmediaserver state=started
+
