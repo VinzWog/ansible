@@ -1,0 +1,21 @@
+#####
+# Tasks to configure plex
+#####
+
+
+- name: Stop Plex service
+  systemd:
+    name: plexmediaserver
+    state: stopped
+
+- name: Copy and extract configured Plex archive
+  unarchive:
+    src: "{{ PLEX_CONF_BACKUP }}"
+    dest: "{{ PLEX_CONF_PATH }}"
+    owner: plex
+    group: plex
+
+- name: Start Plex service
+  systemd:
+    name: plexmediaserver
+    state: started
