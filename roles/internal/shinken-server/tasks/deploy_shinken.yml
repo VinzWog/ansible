@@ -1,0 +1,21 @@
+#####
+# Tasks to deploy_shinken
+#####
+  
+- name: Add shinken user
+  user:
+    name: shinken
+    state: present
+    
+- name: Install shinken using pip
+  pip:
+    name: shinken
+    version: "{{ SHINKEN_VERSION }}"
+    
+- name: Enable init scripts
+  shell: "chkconfig --add shinken && chkconfig shinken on"
+  
+- name: Start shinken
+  service:
+    name: shinken
+    state: started
