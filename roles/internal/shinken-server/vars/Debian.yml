@@ -1,0 +1,7 @@
+#####
+# Variables for Debian hosts
+#####
+
+BASIC_PACKAGES:
+ - vim
+ - man

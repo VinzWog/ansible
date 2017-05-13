@@ -1,0 +1,20 @@
+#####
+# Main task file for shinken_server role
+#####
+
+#- name: Load vault
+#  include_vars: vault-shinken_server.yml
+#  no_log: true
+
+- name: Include common variables
+  include_vars: vars-common.yml
+  
+- debug:
+   msg: '====| PLAY : deploy_required_packages |===='
+- include: deploy_required_packages.yml
+  become: yes
+
+- debug:
+   msg: '====| PLAY : deploy_shinken |===='
+- include: deploy_shinken.yml
+  become: yes

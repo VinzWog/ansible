@@ -13,3 +13,8 @@
 - debug:
     msg: '====| PLAY : deploy_basic_packages |===='
 - include: deploy_basic_packages.yml
+
+- debug:
+    msg: '====| PLAY : disable_root_access |===='
+- include: disable_root_access.yml
+
