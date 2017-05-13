@@ -14,32 +14,58 @@
   include_vars: "{{ ansible_distribution }}.yml"
   when: ansible_distribution == 'Debian'
 
-- name: Install basic packages
+- name: Install required packages
   package:
     name: "{{ item }}"
     state: latest
-  with_items: "{{ BASIC_PACKAGES }}"
+  with_items: "{{ REQUIRED_PACKAGES }}"
   become: yes
 
 ### Block for Debian/Ubuntu 
 
-- name: Add Docker apt repo key
+#- name: Add Docker apt repo key
+#  apt_key:
+#    keyserver: "{{ DOCKER_DEB_KEY_SERVER }}"
+#    id: "{{ DOCKER_DEB_KEY_ID }}"
+#    state: present
+#  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'  
+#  become: yes
+
+- name: Add Docker apt repository key
   apt_key:
-    keyserver: "{{ DOCKER_DEB_KEY_SERVER }}"
     id: "{{ DOCKER_DEB_KEY_ID }}"
+    keyserver: "{{ DOCKER_DEB_KEY_SERVER }}"
     state: present
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'  
+  when: ansible_distribution == 'Ubuntu'
+  register: add_repository_key
+  ignore_errors: true
+
+- name: Alternative | Add Docker apt repository key
+  shell: "curl -fsSL {{ DOCKER_UBUNTU_KEY }} | sudo apt-key add -"
+  when: add_repository_key|failed
+
+- name: Add Docker apt repository
+  apt_repository:
+    repo: "{{ DOCKER_UBUNTU_REPO }}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
   become: yes
 
 - name: Add Docker apt repository
   apt_repository:
-    repo: "{{ DOCKER_DEB_REPO }}"
+    repo: "{{ DOCKER_DEBIAN_REPO }}"
     state: present
     update_cache: yes
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'  
+  when: ansible_distribution == 'Debian'
   become: yes
 
-
+- name: Install Docker CE for Debian/Ubuntu
+  package:
+    name: docker-ce
+    state: latest
+  become: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 ###
 

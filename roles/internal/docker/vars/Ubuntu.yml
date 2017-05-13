@@ -2,6 +2,11 @@
 # Variables for Ubuntu hosts
 #####
 
-BASIC_PACKAGES:
- - man
- - vim
+REQUIRED_PACKAGES:
+ - linux-image-extra-{{ ansible_kernel }}
+ - linux-image-extra-virtual
+ - aufs-tools
+ - apt-transport-https
+ - ca-certificates
+ - curl
+ - software-properties-common
