@@ -3,9 +3,12 @@
 #####
 
 
-DOCKER_DEB_KEY_SERVER: "hkp://p80.pool.sks-keyservers.net:80"
-DOCKER_DEB_KEY_ID: "58118E89F3A912897C070ADBF76221572C52609D"
+DOCKER_DEB_KEY_SERVER: hkp://p80.pool.sks-keyservers.net:80
+DOCKER_DEB_KEY_ID: 58118E89F3A912897C070ADBF76221572C52609D
 
-DOCKER_DEB_REPO: "deb https://apt.dockerproject.org/repo"
+DOCKER_UBUNTU_KEY: https://download.docker.com/linux/ubuntu/gpg
+
+DOCKER_UBUNTU_REPO: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+DOCKER_DEBIAN_REPO: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
 
 DOCKER_RPM_REPO: "https://download.docker.com/linux/centos/docker-ce.repo"

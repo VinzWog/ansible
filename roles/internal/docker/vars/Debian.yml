@@ -2,6 +2,6 @@
 # Variables for Debian hosts
 #####
 
-BASIC_PACKAGES:
+REQUIRED_PACKAGES:
  - man
  - vim

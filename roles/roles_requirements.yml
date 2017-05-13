@@ -1,3 +1,6 @@
 - name: ansible-docker
   src: git+https://github.com/azavea/ansible-docker.git
   version: "3.0.0"
+  
+- name: ansible-shinken-server
+  src: git+https://github.com/mamercad/ansible-shinken-server.git
