@@ -4,9 +4,9 @@
 
 ### CentOS only for now
 - block:
-    - name: '====| ERROR : Distribution not handled by this role yet |===='
+    - name: Distribution ompatibility check
       debug:
-        msg: '====| Bye ! |===='
+        msg: '====| ERROR : Distribution not handled by this role yet |===='
 
     - meta: end_play
   when: ansible_distribution != 'CentOS'
@@ -19,7 +19,7 @@
 - include: deploy_required_packages.yml
   become: yes
 
-#- debug:
-#   msg: '====| PLAY : deploy_shinken |===='
-#- include: deploy_shinken.yml
-#  become: yes
+- debug:
+   msg: '====| PLAY : deploy_thruk |===='
+- include: deploy_thruk.yml
+  become: yes
