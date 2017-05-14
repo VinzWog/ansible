@@ -25,8 +25,8 @@
     name: thruk
     state: started
 
-  - name: Thruk should be up and running !
-    debug: msg="\n\tConnect to https://{{ ansible_host }}/thruk
+- name: Thruk should be up and running !
+  debug: msg="\n\tConnect to https://{{ ansible_host }}/thruk
                 \n\t- Default login/pass => thrukadmin
                 \n\t
-\n\t Enjoy !"
+                \n\t Enjoy !"
