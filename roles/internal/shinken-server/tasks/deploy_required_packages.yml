@@ -6,14 +6,6 @@
   include_vars: "{{ ansible_distribution }}.yml"
   when: ansible_distribution == 'CentOS'
 
-- block:
-    - name: '====| ERROR : Distribution not handled by this role yet, bye |===='
-      debug:
-        msg: "nothing to upgrade, ending play"
-
-    - meta: end_play
-  when: ansible_distribution != 'CentOS'
-
 #- name: Include variables for Ubuntu
 #  include_vars: "{{ ansible_distribution }}.yml"
 #  when: ansible_distribution == 'Ubuntu' or 
