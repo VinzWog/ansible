@@ -1,5 +1,5 @@
 #####
-# Main task file for generic role
+# Main task file for common role
 #####
 
 - name: Load vault

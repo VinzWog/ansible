@@ -4,7 +4,7 @@
 
 ### CentOS only for now
 - block:
-    - name: Distribution ompatibility check
+    - name: Distribution compatibility check
       debug:
         msg: '====| ERROR : Distribution not handled by this role yet |===='
 
