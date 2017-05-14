@@ -1,7 +1,9 @@
 #####
-# Handlers for generic role
+# Handlers for common role
 #####
 
 - name: Restart SSH
-  service: name=sshd state=restarted
+  service:
+    name: sshd
+    state: restarted
   become: yes
