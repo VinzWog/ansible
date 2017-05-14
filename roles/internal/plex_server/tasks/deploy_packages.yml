@@ -2,9 +2,9 @@
 # Tasks to deploy_required_packages
 #####
 
-- name: Include variables for CentOS
-  include_vars: "{{ ansible_distribution }}.yml"
-  when: ansible_distribution == 'CentOS'
+#- name: Include variables for CentOS
+#  include_vars: "{{ ansible_distribution }}.yml"
+#  when: ansible_distribution == 'CentOS'
 
 - name: Include variables for Ubuntu
   include_vars: "{{ ansible_distribution }}.yml"
@@ -43,14 +43,13 @@
   when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'  
   become: yes
 
-###
-
-- name: Add Plex yum repository 
-  yum_repository:
-    name: PlexRepo
-    description: Official Plex Media Server repository
-    baseurl:  "{{ PLEX_RPM_REPO }}"
-    gpgkey:  "{{ PLEX_RPM_REPO_KEY }}"
-    gpgcheck: yes
-  when: ansible_distribution == 'CentOS'
-  become: yes
+### Block for CentOS 
+#- name: Add Plex yum repository 
+#  yum_repository:
+#    name: PlexRepo
+#    description: Official Plex Media Server repository
+#    baseurl:  "{{ PLEX_RPM_REPO }}"
+#    gpgkey:  "{{ PLEX_RPM_REPO_KEY }}"
+#    gpgcheck: yes
+#  when: ansible_distribution == 'CentOS'
+#  become: yes

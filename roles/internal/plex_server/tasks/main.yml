@@ -2,6 +2,15 @@
 # Main task file for plex_server role
 #####
 
+### Debian/Ubuntu only for now
+- block:
+    - name: '====| ERROR : Distribution not handled by this role yet |===='
+      debug:
+        msg: '====| Bye ! |===='
+
+    - meta: end_play
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' 
+
 - name: Include common variables
   include_vars: vars-common.yml
 

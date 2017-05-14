@@ -2,7 +2,6 @@
 # Tasks to configure plex
 #####
 
-
 - name: Stop Plex service
   systemd:
     name: plexmediaserver
