@@ -1,0 +1,24 @@
+#####
+# Tasks to deploy_thruk
+#####
+    
+- name: Install thruk
+  package:
+    name: thruk
+    state: latest
+    
+- name: Enable thruk init scripts
+  shell: "chkconfig thruk on"
+
+- name: Enable httpd init scripts
+  shell: "chkconfig httpd on"
+  
+- name: Start httpd
+  service:
+    name: httpd
+    state: started
+
+- name: Start thruk
+  service:
+    name: thruk
+    state: started

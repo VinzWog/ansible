@@ -1,0 +1,13 @@
+#####
+# Variables for CentOS hosts
+#####
+
+EPEL_YUM_REPO: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+EPEL_YUM_KEY: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+
+LABS_YUM_REPO: "https://labs.consol.de/repo/stable/rhel7/i386/labs-consol-stable.rhel7.noarch.rpm"
+
+BASIC_PACKAGES:
+ - man
+ - vim
+ - httpd
