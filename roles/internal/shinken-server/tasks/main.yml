@@ -11,10 +11,6 @@
     - meta: end_play
   when: ansible_distribution != 'CentOS'
 
-#- name: Load vault
-#  include_vars: vault-shinken_server.yml
-#  no_log: true
-
 - name: Include common variables
   include_vars: vars-common.yml
   
