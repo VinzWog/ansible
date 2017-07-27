@@ -4,3 +4,6 @@
   
 - name: jimbydamonk.graphite
   src: git+https://github.com/jimbydamonk/ansible-graphite.git
+
+- name: stefangweichinger.ansible-rclone
+  src: git+https://github.com/stefangweichinger/ansible-rclone.git

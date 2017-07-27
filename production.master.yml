@@ -3,4 +3,8 @@
     - common
     - acd_cli
     - plex_server
+    
+- hosts: base
+  roles:
+    - common
 
