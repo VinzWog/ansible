@@ -1,8 +1,12 @@
-- hosts: test
+- hosts: test-monitoring-server
   roles:
 #    - common
 #    - shinken-server
-    - thruk
+#    - thruk
+    
+- hosts: test-acd_cli
+  roles:
+    - acd_cli
 
 
 
