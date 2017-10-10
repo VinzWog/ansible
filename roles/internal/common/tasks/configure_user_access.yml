@@ -44,6 +44,7 @@
     owner: "{{ GENERIC_DEPLOY_USERNAME }}"
     group: "{{ GENERIC_DEPLOY_USERNAME }}"
     mode: 0755
+  become: yes
 
 - name: Copy SSH authorized keys
   copy:
