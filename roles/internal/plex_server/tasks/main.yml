@@ -9,15 +9,15 @@
         msg: '====| Bye ! |===='
 
     - meta: end_play
-  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' 
+  when: ansible_distribution != 'Ubuntu' and ansible_distribution != 'Debian' 
 
 - name: Include common variables
   include_vars: vars-common.yml
 
 - debug:
     msg: '====| PLAY : deploy_packages |===='
-- include: deploy_packages.yml
+- import_tasks: deploy_packages.yml
 
-#- debug:
-#    msg: '====| PLAY : configure_plex |===='
-#- include: configure_plex.yml
+- debug:
+    msg: '====| PLAY : configure_plex |===='
+- import_tasks: configure_plex.yml

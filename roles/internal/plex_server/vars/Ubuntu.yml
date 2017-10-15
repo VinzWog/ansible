@@ -5,3 +5,4 @@
 BASIC_PACKAGES:
  - man
  - vim
+ - tar

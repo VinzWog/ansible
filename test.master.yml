@@ -8,8 +8,7 @@
 #  roles:
 #    - acd_cli
 
-- hosts: plex
-  roles:
-    - common
-    - plex_server
-
+#- hosts: plex
+#  roles:
+#    - common
+#    - plex_server

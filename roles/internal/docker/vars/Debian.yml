@@ -1,7 +1,0 @@
-#####
-# Variables for Debian hosts
-#####
-
-REQUIRED_PACKAGES:
- - man
- - vim

@@ -53,6 +53,7 @@
     owner: "{{ GENERIC_DEPLOY_USERNAME }}"
     group: "{{ GENERIC_DEPLOY_USERNAME }}"
     mode: 0644
+  become: yes
 
 - name: Add curent user pubkey to authorized_keys file (if not already exists)
   authorized_key:
@@ -60,3 +61,4 @@
     key: "{{ item }}"
   with_file:
     - ~/.ssh/id_rsa.pub
+  become: yes
