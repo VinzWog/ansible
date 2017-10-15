@@ -3,18 +3,22 @@
 #####
 
 - name: Stop Plex service
-  systemd:
+  service:
     name: plexmediaserver
     state: stopped
+  become: yes
 
 - name: Copy and extract configured Plex archive
   unarchive:
     src: "{{ PLEX_CONF_BACKUP }}"
     dest: "{{ PLEX_CONF_PATH }}"
+    remote_src: yes
     owner: plex
     group: plex
+  become: yes
 
 - name: Start Plex service
-  systemd:
+  service:
     name: plexmediaserver
     state: started
+  become: yes
