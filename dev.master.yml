@@ -1,4 +1,5 @@
-- hosts: docker
+- hosts: docker-plex
 
   roles:
-  - docker
+  - rclone
+#  - docker-host

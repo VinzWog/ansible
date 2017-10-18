@@ -29,3 +29,7 @@ Execute all roles of production.yml whith inventory production_hosts.inv, user r
 ```
 ansible-playbook production.yml -i production_hosts.inv -u root --ask-pass --ask-become-pass --ask-vault-pass
 ```
+Execute all roles of dev.master.yml whith inventory file host.ini, user root and vault pass in file vault.txt
+```
+ansible-playbook dev.master.yml -i ~/Documents/host.ini -u root --ask-sudo-pass --vault-password-file ~/Documents/vault.txt
+```

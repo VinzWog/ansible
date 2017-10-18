@@ -1,6 +1,0 @@
-#####
-# Variables for shinken_server role
-#####
-
-SHINKEN_VERSION: 2.4.3
-

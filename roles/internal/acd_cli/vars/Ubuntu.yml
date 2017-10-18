@@ -3,7 +3,6 @@
 #####
 
 BASIC_PACKAGES:
- - python3-venv
  - python3-pip
  - git
  - fuse
