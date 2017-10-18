@@ -12,7 +12,7 @@
   
 - name: Include variables for Debian
   include_vars: "{{ ansible_distribution }}.yml"
-  when: ansible_distribution == 'Debian'
+
 
 - name: Install basic packages
   package:
@@ -26,7 +26,19 @@
     name: "git+https://github.com/yadayada/acd_cli.git"
     editable: false
     extra_args: '--upgrade'
-    virtualenv_command: pyvenv
-#    virtualenv_command: pyvenv-3.4    
+    virtualenv_command: pyvenv  
     virtualenv: "{{ ACD_INSTALL_PATH }}" 
   become: yes
+  when: ansible_distribution == 'Debian'
+
+- name: Install acdcli using pip
+  pip:
+    name: "git+https://github.com/yadayada/acd_cli.git"
+    editable: false
+    extra_args: '--upgrade'
+    virtualenv_command: pyvenv  
+    executable: pip3
+  become: yes
+  when: ansible_distribution == 'Ubuntu'
+  
+

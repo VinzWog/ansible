@@ -21,8 +21,8 @@
 
 - debug:
    msg: '====| PLAY : deploy_required_packages |===='
-- include: deploy_required_packages.yml
+- import_tasks: deploy_required_packages.yml
 
 - debug:
    msg: '====| PLAY : configure_acd_cli |===='
-- include: configure_acd_cli.yml
+- import_tasks: configure_acd_cli.yml

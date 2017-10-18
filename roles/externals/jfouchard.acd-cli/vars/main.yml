@@ -1,0 +1,5 @@
+---
+# vars file for acd_cli
+apt_packages:
+  - python3-pip
+  - fuse

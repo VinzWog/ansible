@@ -6,4 +6,4 @@
 *.inv*
 *.inv
 /roles/external/*
-oauth_data
+oauth*

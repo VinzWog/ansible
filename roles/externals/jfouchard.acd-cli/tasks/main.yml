@@ -1,0 +1,76 @@
+---
+# tasks file for acd_cli
+- name: Install pip3
+  action: apt
+  args:
+    name: "{{ item }}"
+  with_items: "{{ apt_packages }}"
+  sudo: yes
+
+- name: Install acd_cli
+  action: pip
+  args:
+    name: "git+https://github.com/yadayada/acd_cli.git"
+    editable: false
+    executable: pip3
+    extra_args: '--upgrade'
+  sudo: yes
+
+- name: Create ACD cache directory
+  action: file
+  args:
+    path: ~/.cache/acd_cli
+    state: directory
+    recurse: yes
+
+- name: Install OAuth file
+  action: copy
+  args:
+    src: oauth_data
+    dest: ~/.cache/acd_cli/oauth_data
+    force: no
+
+- name: Perform initial sync
+  command: acdcli sync
+  args:
+    creates: ~/.cache/acd_cli/nodes.db
+
+- name: Create ACD mountpoint
+  action: file
+  args:
+    path: "~/{{ acd_mountpoint }}"
+    state: directory
+    recurse: yes
+
+- name: Create User SystemD directory
+  action: file
+  args:
+    path: ~/.config/systemd/user
+    state: directory
+    recurse: yes
+
+- name: Install SystemD unit file
+  action: template
+  args:
+    dest: ~/.config/systemd/user/acd.service
+    src: acd.service
+
+# Hacks below to work around missing ansible 2.2
+
+# - name: Enable mount
+#   action: systemd
+#   args:
+#     enabled: yes
+#     name: acd.service
+#     user: yes
+#     state: started
+#     daemon_reload: yes
+
+- name: SystemD Daemon reload
+  command: systemctl --user daemon-reload
+
+- name: SystemD start
+  command: systemctl --user start acd.service
+
+- name: SystemD start
+  command: systemctl --user enable acd.service
