@@ -1,9 +1,0 @@
-#####
-# Handlers for common role
-#####
-
-- name: Restart SSH
-  service:
-    name: sshd
-    state: restarted
-  become: yes

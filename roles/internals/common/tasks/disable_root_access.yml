@@ -1,0 +1,23 @@
+#####
+# Tasks to disable_root_access
+#####
+
+- name: Disallow password authentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: 'PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    force: yes
+    state: present
+  become: yes
+  notify: Reload SSH
+
+- name: Disallow root SSH access
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: 'PermitRootLogin'
+    line: 'PermitRootLogin no'
+    force: yes
+    state: present
+  become: yes
+  notify: Reload SSH
