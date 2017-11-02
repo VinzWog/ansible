@@ -1,7 +1,0 @@
-#####
-# Variables for Ubuntu hosts
-#####
-
-BASIC_PACKAGES:
- - man
- - vim

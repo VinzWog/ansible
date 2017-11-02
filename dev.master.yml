@@ -1,5 +1,13 @@
-- hosts: docker-plex
+- hosts: aws
+
+  vars:
+    pip_install_packages:
+      - name: docker
 
   roles:
-  - rclone
-#  - docker-host
+    - common
+    - geerlingguy.pip
+    - geerlingguy.docker
+    - rclone
+  
+  

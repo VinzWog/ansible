@@ -1,0 +1,64 @@
+#####
+# Tasks to configure_user_access
+#####
+
+- name: Add user
+  user:
+    name: "{{ GENERIC_DEPLOY_USERNAME }}"
+    password: "{{ GENERIC_DEPLOY_PASSWORD }}"
+    shell: /bin/bash
+  become: yes
+
+- name: Install sudo
+  package:
+    name: sudo
+    state: latest
+  become: yes
+  
+#- name: Install python bindings for Debian/Ubuntu
+#  package:
+#    name: python-selinux
+#    state: latest
+#  become: yes
+#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+#  
+#- name: Install python bindings for CentOS
+#  package:
+#    name: libselinux-python
+#    state: latest
+#  become: yes
+#  when: ansible_distribution == 'CentOS'
+
+- name: Configure deploy user in sudoers file
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^{{ GENERIC_DEPLOY_USERNAME }} ALL"
+    line: "{{ GENERIC_DEPLOY_USERNAME }} ALL=(ALL:ALL) ALL"
+  become: yes
+
+- name : Create SSH directory
+  file:
+    path: /home/{{ GENERIC_DEPLOY_USERNAME }}/.ssh
+    state: directory
+    owner: "{{ GENERIC_DEPLOY_USERNAME }}"
+    group: "{{ GENERIC_DEPLOY_USERNAME }}"
+    mode: 0755
+  become: yes
+
+- name: Copy SSH authorized keys
+  copy:
+    src: ssh-pubkeys.txt
+    dest: /home/{{ GENERIC_DEPLOY_USERNAME }}/.ssh/authorized_keys
+    owner: "{{ GENERIC_DEPLOY_USERNAME }}"
+    group: "{{ GENERIC_DEPLOY_USERNAME }}"
+    mode: 0644
+  become: yes
+
+- name: Add curent user pubkey to authorized_keys file (if not already exists)
+  authorized_key:
+    user: "{{ GENERIC_DEPLOY_USERNAME }}"
+    key: "{{ item }}"
+  with_file:
+    - ~/.ssh/id_rsa.pub
+  become: yes

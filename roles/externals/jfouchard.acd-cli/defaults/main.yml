@@ -1,4 +1,0 @@
----
-# defaults file for acd_cli
-#This is relative to ~
-acd_mountpoint: acd
