@@ -1,10 +1,6 @@
-- hosts: plex
-  roles:
-    - common
-    - acd_cli
-    - plex_server
-    
+### ansible-playbook production.master.yml -i ~/Documents/hosts --vault-password-file ~/Documents/vault.txt
+
 - hosts: base
   roles:
-    - common
+    - base
 

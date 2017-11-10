@@ -1,0 +1,50 @@
+### ansible-playbook playbooks/deploy-seedbox/main.yml -i hosts --vault-password-file vault
+### ansible-playbook playbooks/deploy-seedbox/main.yml -i hosts --extra-vars "target=ansible-test"
+---
+  - name: Deploy a full seedbox
+    hosts: seedbox
+#    hosts: '{{ target }}'
+
+    vars:
+      user_uid: 1010
+      user_gid: 1010
+      install_path: "/home/{{ ansible_ssh_user }}"
+      deluge_config_path: "{{ install_path }}/.config/deluge"
+      deluge_dl_path: "{{ install_path }}/downloads"
+      sonarr_config_path: "{{ install_path }}/.config/sonarr"
+      sonarr_tv_shows_path: "{{ install_path }}/GD/Hulk/TV Shows"
+       
+    tasks:
+#      - name : Install docker
+#        include_role:
+#          name: angstwad.docker_ubuntu
+#        vars:
+#          docker_group_members:
+#          - "{{ ansible_ssh_user }}"
+#        become: yes
+          
+      - name: Load vault
+        include_vars: vault-seedbox.yml
+        no_log: true
+        
+      - name: Create directory for docker-compose
+        file:
+          path: "{{ install_path }}/seedbox-docker-services"
+          state: directory
+
+      - name: Copy Docker Compose file
+        template:
+          src: tpl_docker-compose.yml
+          dest: "{{ install_path }}/seedbox-docker-services/docker-compose.yml"
+
+      - name: Spin up "docker composed" apps
+        docker_service:
+          project_src: "{{ install_path }}/seedbox-docker-services"
+          state: present
+          
+      - name: Configure Deluge
+        include_tasks: configure-deluge.yml
+        
+      - name: Configure Sonarr
+        include_tasks: configure-sonarr.yml
+

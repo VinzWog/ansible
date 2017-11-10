@@ -1,0 +1,37 @@
+---
+version: "2"
+services:
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+    network_mode: host
+### Facultative
+#    ports:
+#      - "8112:8112"
+#      - "58846:21123"
+###
+    environment:
+      - PUID={{ user_uid }}
+      - PGID={{ user_gid }}
+    volumes:
+      - {{ deluge_config_path }}:/config
+      - {{ deluge_dl_path }}:/downloads    
+    restart: always
+  sonaar:
+    image: linuxserver/sonarr
+    container_name: sonarr
+### Facultative
+#    ports:
+#      - "8989:8989"
+###
+    environment:
+      - PUID={{ user_uid }}
+      - PGID={{ user_gid }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ sonarr_config_path }}:/config
+      - {{ sonarr_tv_shows_path }}:/tv
+      - {{ deluge_dl_path }}:/downloads 
+    links:
+      - deluge
+    restart: always
