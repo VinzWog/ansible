@@ -1,0 +1,40 @@
+---
+    - name: Stop Deluge container
+      docker_container:
+        name: deluge
+        state: stopped
+
+    - name: Set user
+      lineinfile:
+        dest: "{{ deluge_config_path }}/auth"
+        line: "{{ deluge_user }}:{{ deluge_pass }}:10"
+        state: present
+        create: yes
+        mode: 0600
+
+    - name: Copy Deluge configuration "core.conf"
+      copy:
+        src: tpl_deluge-core.conf
+        dest: "{{ deluge_config_path }}/core.conf"
+        mode: 0644
+        
+    - name: Copy Deluge WebUI configuration "web.conf"
+      copy:
+        src: tpl_deluge-web.conf
+        dest: "{{ deluge_config_path }}/web.conf"
+        mode: 0644
+
+    - name: Copy Deluge label plugin "label.conf"
+      copy:
+        src: tpl_deluge-label.conf
+        dest: "{{ deluge_config_path }}/label.conf"
+        mode: 0644   
+        
+    - name: Start Deluge container
+      docker_container:
+        name: deluge
+        state: started
+        
+
+
+

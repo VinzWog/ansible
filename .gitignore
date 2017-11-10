@@ -1,4 +1,3 @@
-
 .DS_Store
 *.swp
 *.retry
@@ -7,3 +6,4 @@
 *.inv
 /roles/external/*
 oauth*
+*.db

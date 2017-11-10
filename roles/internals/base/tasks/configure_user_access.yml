@@ -2,11 +2,20 @@
 # Tasks to configure_user_access
 #####
 
+- name: Add group
+  group:
+    name: "{{ GENERIC_DEPLOY_USERNAME }}"
+    state: present
+    gid: 1010
+  become: yes
+    
 - name: Add user
   user:
     name: "{{ GENERIC_DEPLOY_USERNAME }}"
     password: "{{ GENERIC_DEPLOY_PASSWORD }}"
     shell: /bin/bash
+    uid: 1010
+    group: vinz
   become: yes
 
 - name: Install sudo
@@ -34,7 +43,7 @@
     dest: /etc/sudoers
     state: present
     regexp: "^{{ GENERIC_DEPLOY_USERNAME }} ALL"
-    line: "{{ GENERIC_DEPLOY_USERNAME }} ALL=(ALL:ALL) ALL"
+    line: "{{ GENERIC_DEPLOY_USERNAME }} ALL=(ALL) ALL"
   become: yes
 
 - name : Create SSH directory
