@@ -5,18 +5,18 @@
 - name: Disallow password authentication
   lineinfile:
     dest: /etc/ssh/sshd_config
-    regexp: 'PasswordAuthentication'
-    line: 'PasswordAuthentication no'
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
     force: yes
     state: present
   become: yes
   notify: Reload SSH
 
-- name: Disallow root SSH access
+- name: Root access with SSH Key Only
   lineinfile:
     dest: /etc/ssh/sshd_config
-    regexp: 'PermitRootLogin'
-    line: 'PermitRootLogin no'
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin prohibit-password"
     force: yes
     state: present
   become: yes

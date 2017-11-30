@@ -6,42 +6,75 @@
 #    hosts: '{{ target }}'
 
     vars:
+      locale: en_US.UTF-8
+      timezone: Europe/Paris
       user_uid: 1010
       user_gid: 1010
-      install_path: "/home/{{ ansible_ssh_user }}"
-      deluge_config_path: "{{ install_path }}/.config/deluge"
-      deluge_dl_path: "{{ install_path }}/downloads"
-      sonarr_config_path: "{{ install_path }}/.config/sonarr"
-      sonarr_tv_shows_path: "{{ install_path }}/GD/Hulk/TV Shows"
+      global_install_path: "/home/{{ ansible_ssh_user }}"
+      global_config_path: "/home/{{ ansible_ssh_user }}/.config"
+      rclone_config_source: ~/Documents/RClone/rclone.conf.txt
+      rclone_config_path: "{{ global_config_path }}/rclone/rclone.conf"
+      rclone_ACD_mount: /mnt/AmazonCloudDrive
+      rclone_GD_mount: /mnt/GoogleDrive
+      rclone_DB_mount: /mnt/Dropbox  
+      deluge_config_path: "{{ global_config_path }}/deluge"
+      deluge_dl_path: "{{ global_install_path }}/downloads"
+      sonarr_config_path: "{{ global_config_path }}/sonarr"
+      sonarr_db_source: ~/Documents/nzbdrone.db
+      sonarr_tv_shows_path: "{{ rclone_GD_mount }}/Hulk/TV Shows"
+      plex_config_path: "{{ global_config_path }}/plex"
        
-    tasks:
-#      - name : Install docker
+    tasks:        
+      - name: Load vault
+        include_vars: vault-seedbox.yml
+        no_log: true
+
+
+      - name: Prepare system
+        include_tasks: configure-sytem.yml
+         
+#      - name : Install Rclone
+#        include_role:
+#          name: stefangweichinger.ansible-rclone
+#        become: yes
+#          
+#      - name: Configure Rclone
+#        include_tasks: configure-rclone.yml
+#
+#      - name: Configure Rclone Google Drive
+#        include_tasks: configure-rclone-drives.yml
+#        vars:
+#          rclone_connection_description: Google Drive
+#          rclone_connection_name: GD
+#          rclone_mount_point: {{ rclone_GD_mount }}
+#            
+#      - name: Configure Rclone Amazon Cloud Drive
+#        include_tasks: configure-rclone-drives.yml
+#        vars:
+#          rclone_connection_description: Amazon Cloud Drive
+#          rclone_connection_name: ACD
+#          rclone_mount_point: {{ rclone_ACD_mount }}
+
+#      - name : Install Docker
 #        include_role:
 #          name: angstwad.docker_ubuntu
 #        vars:
 #          docker_group_members:
 #          - "{{ ansible_ssh_user }}"
 #        become: yes
-          
-      - name: Load vault
-        include_vars: vault-seedbox.yml
-        no_log: true
-        
-      - name: Create directory for docker-compose
-        file:
-          path: "{{ install_path }}/seedbox-docker-services"
-          state: directory
 
-      - name: Copy Docker Compose file
-        template:
-          src: tpl_docker-compose.yml
-          dest: "{{ install_path }}/seedbox-docker-services/docker-compose.yml"
+      - name: Set up docker-compose
+        include_tasks: configure-containers.yml
 
-      - name: Spin up "docker composed" apps
-        docker_service:
-          project_src: "{{ install_path }}/seedbox-docker-services"
-          state: present
-          
+#      - name: Spin up "docker composed" apps
+#        docker_service:
+#          project_src: "{{ global_install_path }}/seedbox-docker-services"
+#          state: present
+#      register: task_result
+#      until: task_result.rc == 0
+#      retries: 2
+#      delay: 5
+            
       - name: Configure Deluge
         include_tasks: configure-deluge.yml
         
