@@ -1,19 +1,7 @@
 ### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
 
-- name: geerlingguy.docker 
-  src: git+https://github.com/geerlingguy/ansible-role-docker.git
-
-- name: geerlingguy.pip
-  src: git+https://github.com/geerlingguy/ansible-role-pip.git
-#
-#- name: stefangweichinger.ansible-rclone
-#  src: git+https://github.com/stefangweichinger/ansible-rclone.git
-
-#- name: jimbydamonk.graphite
-#  src: git+https://github.com/jimbydamonk/ansible-graphite.git
-
-#- name: jfouchard.acd-cli
-#  src: git+https://github.com/jfouchard/ansible-role-acd-cli.git
-
 - name: angstwad.docker_ubuntu
   src: git+https://github.com/angstwad/docker.ubuntu.git
+
+- name: stefangweichinger.ansible-rclone
+  src: git+https://github.com/stefangweichinger/ansible-rclone.git
