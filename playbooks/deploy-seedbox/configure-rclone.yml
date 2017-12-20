@@ -9,3 +9,4 @@
       src: "{{ rclone_config_source }}"
       dest: "{{ rclone_config_path }}"
       mode: 0644
+
