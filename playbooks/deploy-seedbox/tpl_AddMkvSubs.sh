@@ -3,8 +3,6 @@
 # http://www.bunkus.org/videotools/mkvtoolnix/doc/mkvmerge.html
 
 CmdPath="/usr/bin"
-#Dimensions="1280x720"
-Dimensions="1920x1080"
 Charset="UTF-8"
 #Charset="ISO_8859-15"
 
@@ -22,30 +20,33 @@ Delay="0"
 #read UserSubFilePath
 #
 
-TargetPath="/mnt/Morpheus/@Muxed/"
-WorkPath="/mnt/Morpheus/@ToMux/"
-VideoFilePath="/mnt/Morpheus/@ToMux/Vids/"
-SubFilePath="/mnt/Morpheus/@ToMux/Subs/"
+TargetPath="{{ download_path }}/Muxed/"
+WorkPath="{{ download_path }}/@ToMux/"
+VideoFilePath="{{ download_path }}/@ToMux/Vids/"
+SubFilePath="{{ download_path }}/@ToMux/Subs/"
 
 FileNumber=`ls "$VideoFilePath"|wc -l`
 NumberCount=`expr $FileNumber - 1`
 
+# Clean Synology specific directories
 rm -rf $VideoFilePath\@eaDir
 rm -rf $SubFilePath\@eaDir
 
-# Retrait des espaces
+# Remove spaces in filenames
 for file in $VideoFilePath/* ; do newfile=$( echo "$file" | tr -d \\n | sed 's/ //g' );
    test "$file" != "$newfile" && mv "$file" "$newfile"; done
 
 for file in $SubFilePath/* ; do newfile=$( echo "$file" | tr -d \\n | sed 's/ //g' );
    test "$file" != "$newfile" && mv "$file" "$newfile"; done
 
+# List Video files in array
 declare -a VideoArray=()
 for VideoFile in `ls "$VideoFilePath"`
 	do VideoArray=("${VideoArray[@]}" "$VideoFile") 
 	#echo $VideoFile
 	done
 
+# List Subs files in array
 declare -a SubArray=()
 for SubFile in `ls "$SubFilePath"`
 	do SubArray=("${SubArray[@]}" "$SubFile") 
@@ -59,7 +60,7 @@ while [ $count -lt $NumberCount ]; do
 	OutputFile=${VideoArray[$count]/%.[a-z][a-z][a-z]/.mkv}
 	OutputFile=${VideoArray[$count]/%.[a-z][a-z][0-9]/.mkv}
 	"$CmdPath/mkvmerge" -o "$TargetPath$OutputFile" "--title" "$OutputFile" "--track-order" "0:0,0:1,1:0" \
-	"--default-track" "0:yes" "--forced-track" "0:no" "--display-dimensions" "0:$Dimensions" "--language" "1:eng" "--default-track" "1:yes" "--forced-track" "1:no" "-S" "-T" "--no-global-tags" "--no-chapters" "$VideoFilePath${VideoArray[$count]}" \
+	"--default-track" "0:yes" "--forced-track" "0:no" "--language" "1:eng" "--default-track" "1:yes" "--forced-track" "1:no" "-S" "-T" "--no-global-tags" "--no-chapters" "$VideoFilePath${VideoArray[$count]}" \
 	"--language" "0:fre" "--sub-charset" "0:$Charset" "--track-name" "0:French Subs" "--forced-track" "0:no" "-s" "0" "-D" "-A" "-T" "--sync" "0:$Delay" "--no-global-tags" "--no-chapters" "$SubFilePath${SubArray[$count]}"
 	done
 }
@@ -68,7 +69,7 @@ merge_sample () {
 	OutputFile=${VideoArray[0]/%.[a-z][a-z][a-z]/.mkv}
 	OutputFile=${VideoArray[0]/%.[a-z][a-z][0-9]/.mkv}
 	"$CmdPath/mkvmerge" -o "$TargetPath$OutputFile" "--title" "$OutputFile" "--track-order" "0:0,0:1,1:0" \
-	"--default-track" "0:yes" "--forced-track" "0:no" "--display-dimensions" "0:$Dimensions" "--language" "1:eng" "--default-track" "1:yes" "--forced-track" "1:no" "-S" "-T" "--no-global-tags" "--no-chapters" "$VideoFilePath${VideoArray[0]}" \
+	"--default-track" "0:yes" "--forced-track" "0:no" "--language" "1:eng" "--default-track" "1:yes" "--forced-track" "1:no" "-S" "-T" "--no-global-tags" "--no-chapters" "$VideoFilePath${VideoArray[0]}" \
 	"--language" "0:fre" "--sub-charset" "0:$Charset" "--track-name" "0:French Subs" "--forced-track" "0:no" "-s" "0" "-D" "-A" "-T" "--sync" "0:$Delay" "--no-global-tags" "--no-chapters" "$SubFilePath${SubArray[0]}"
 }
 
@@ -212,4 +213,4 @@ done
 #echo $NumberCount
 #
 
-#"$CmdPath/mkvmerge" -o "$TargetPath${VideoArray[0]}" "--title" "${VideoArray[0]}" "--default-track" "0:yes" "--forced-track" "0:no" "--display-dimensions" "0:1280x720" "--language" "1:eng" "--default-track" "1:yes" "--forced-track" "1:no" "-S" "-T" "--no-global-tags" "--no-chapters" "$VideoFilePath${VideoArray[0]}" "--language" "0:fre" "--sub-charset" "0:$Charset" "--track-name" "0:French Subs" "--forced-track" "0:no" "-s" "0" "-D" "-A" "-T" "--no-global-tags" "--no-chapters" "$SubFilePath${SubArray[0]}" "--track-order" "0:0,0:1,1:0"
+#"$CmdPath/mkvmerge" -o "$TargetPath${VideoArray[0]}" "--title" "${VideoArray[0]}" "--default-track" "0:yes" "--forced-track" "0:no" "--language" "1:eng" "--default-track" "1:yes" "--forced-track" "1:no" "-S" "-T" "--no-global-tags" "--no-chapters" "$VideoFilePath${VideoArray[0]}" "--language" "0:fre" "--sub-charset" "0:$Charset" "--track-name" "0:French Subs" "--forced-track" "0:no" "-s" "0" "-D" "-A" "-T" "--no-global-tags" "--no-chapters" "$SubFilePath${SubArray[0]}" "--track-order" "0:0,0:1,1:0"

@@ -13,7 +13,7 @@ services:
       - PGID={{ user_gid }}
     volumes:
       - {{ deluge_config_path }}:/config
-      - {{ deluge_dl_path }}:/downloads    
+      - {{ download_path }}:/downloads    
     restart: always
   sonaar:
     container_name: sonarr
@@ -28,7 +28,7 @@ services:
     volumes:
       - {{ sonarr_config_path }}:/config
       - {{ sonarr_tv_shows_path }}:/tv
-      - {{ deluge_dl_path }}:/downloads
+      - {{ download_path }}:/downloads
     devices:
       - /dev/fuse:/dev/fuse
     cap_add:
@@ -53,8 +53,8 @@ services:
       - {{ plex_config_path }}:/config
       - /tmp/plex:/transcode
       - /tmp/plex:/data
-      - {{ deluge_dl_path }}:/downloads
-      - {{ rclone_GD_mount }}/Hulk:/Hulk:ro
+      - {{ download_path }}:/downloads
+      - {{ plexdrive_mount }}/Hulk:/Hulk:ro
 
 
 
