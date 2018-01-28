@@ -7,5 +7,5 @@
   - name: Copy Rclone configuration file
     copy:
       src: "{{ rclone_config_source }}"
-      dest: "{{ rclone_config_path }}"/rclone.conf
+      dest: "{{ rclone_config_path }}/rclone.conf"
       mode: 0644

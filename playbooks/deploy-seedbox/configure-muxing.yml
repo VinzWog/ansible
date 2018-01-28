@@ -11,7 +11,7 @@
       state: present
     become: yes
 
-  - name: Add Docker repository and update apt cache
+  - name: Add MKVToolNix repository and update apt cache
     apt_repository:
       repo: "{{ mkvtoolnix_apt_repo }}"
       mode: '644'
@@ -38,7 +38,7 @@
     with_items:
       - Vids
       - Subs
-      
+
   - name: Set up and copy AddMkvSubs.sh
     template:
       src: tpl_AddMkvSubs.sh
