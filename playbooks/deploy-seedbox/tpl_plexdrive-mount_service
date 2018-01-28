@@ -8,7 +8,7 @@ After=network-online.target
 Type=simple
 User=root
 Group=root
-ExecStart=/usr/sbin/plexdrive mount -o allow_other -v 2 {{ plexdrive_mount }}
+ExecStart=/usr/sbin/plexdrive mount --config {{ rclone_config_path }} -o allow_other -v 2 {{ plexdrive_mount }}
 ExecStop=/bin/fusermount -uz {{ plexdrive_mount }}
 Restart=on-abort
 

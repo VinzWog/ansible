@@ -22,9 +22,9 @@ Type=simple
 User=root
 Group=root
 ### RW mount
-ExecStart=/usr/sbin/rclone mount --config {{ rclone_config_path }} --allow-other -v --log-file=/var/log/rclone-{{ rclone_connection_name }}-RW.log {{ rclone_connection_name }}: {{ rclone_mount_point }}
+ExecStart=/usr/sbin/rclone mount --config {{ rclone_config_path }}/rclone.conf --allow-other -v --log-file=/var/log/rclone-{{ rclone_connection_name }}-RW.log {{ rclone_connection_name }}: {{ rclone_mount_point }}
 ### RO mount
-#ExecStart=/usr/sbin/rclone mount --config {{ rclone_config_path }} --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s -v --log-file=/var/log/rclone-{{ rclone_connection_name }}-RO.log {{ rclone_connection_name }}: {{ rclone_mount_point }}
+#ExecStart=/usr/sbin/rclone mount --config {{ rclone_config_path }}/rclone.conf --read-only --allow-other --acd-templink-threshold 0 --stats 1s --buffer-size 1G --timeout 5s --contimeout 5s -v --log-file=/var/log/rclone-{{ rclone_connection_name }}-RO.log {{ rclone_connection_name }}: {{ rclone_mount_point }}
 ### Unmount
 ExecStop=/bin/fusermount -uz {{ rclone_mount_point }}
 

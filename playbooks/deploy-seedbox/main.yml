@@ -15,10 +15,10 @@
       plexdrive_dl_url: https://github.com/dweidenfeld/plexdrive/releases/download/5.0.0/plexdrive-linux-amd64
       plexdrive_mount: /mnt/PlexDrive
       rclone_config_source: ~/Documents/RClone/rclone.conf.txt
-      rclone_config_path: "{{ global_config_path }}/rclone/rclone.conf"
+      rclone_config_path: "{{ global_config_path }}/rclone/"
       rclone_ACD_mount: /mnt/AmazonCloudDrive
       rclone_GD_mount: /mnt/GoogleDrive
-      rclone_DB_mount: /mnt/Dropbox  
+      rclone_DB_mount: /mnt/Dropbox
       deluge_config_path: "{{ global_config_path }}/deluge"
       download_path: "{{ global_install_path }}/downloads"
       sonarr_config_path: "{{ global_config_path }}/sonarr"
@@ -27,8 +27,8 @@
       plex_config_path: "{{ global_config_path }}/plex"
       mkvtoolnix_apt_key_url: https://mkvtoolnix.download/gpg-pub-moritzbunkus.txt
       mkvtoolnix_apt_repo: "deb https://mkvtoolnix.download/ubuntu/xenial/ ./"
-       
-    tasks:        
+
+    tasks:
       - name: Load vault
         include_vars: vault-seedbox.yml
         no_log: true
@@ -36,12 +36,12 @@
 
 #      - name: Prepare system
 #        include_tasks: configure-sytem.yml
-         
+
 #      - name : Install Rclone
 #        include_role:
 #          name: stefangweichinger.ansible-rclone
 #        become: yes
-#          
+#
 #      - name: Configure Rclone
 #        include_tasks: configure-rclone.yml
 #
@@ -51,7 +51,7 @@
 #          rclone_connection_description: Google Drive
 #          rclone_connection_name: GD
 #          rclone_mount_point: {{ rclone_GD_mount }}
-#            
+#
 #      - name: Configure Rclone Amazon Cloud Drive
 #        include_tasks: configure-rclone-drives.yml
 #        vars:
@@ -59,31 +59,30 @@
 #          rclone_connection_name: ACD
 #          rclone_mount_point: {{ rclone_ACD_mount }}
 
-      - name: Install PlexDrive
-        include_tasks: configure-plexdrive.yml
+#      - name: Install PlexDrive
+#        include_tasks: configure-plexdrive.yml
 
-#      - name : Install Docker
-#        include_role:
-#          name: angstwad.docker_ubuntu
-#        vars:
-#          docker_group_members:
-#          - "{{ ansible_ssh_user }}"
-#        become: yes
+      - name : Install Docker
+        include_role:
+          name: angstwad.docker_ubuntu
+        vars:
+          docker_group_members:
+          - "{{ ansible_ssh_user }}"
+        become: yes
 
-      - name: Set up docker-compose
-        include_tasks: configure-containers.yml
+#      - name: Set up docker-compose
+#        include_tasks: configure-containers.yml
 #
 #      - name: Spin up "docker composed" apps
 #        docker_service:
 #          project_src: "{{ global_install_path }}/seedbox-docker-services"
 #          state: present
-            
+
 #      - name: Configure Deluge
 #        include_tasks: configure-deluge.yml
-#        
+#
 #      - name: Configure Sonarr
 #        include_tasks: configure-sonarr.yml
-        
+
 #      - name: Configure Muxing
 #        include_tasks: configure-muxing.yml
-
