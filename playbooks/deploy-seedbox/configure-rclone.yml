@@ -3,10 +3,9 @@
     file:
       path: "{{ global_config_path }}/rclone"
       state: directory
-        
+
   - name: Copy Rclone configuration file
     copy:
       src: "{{ rclone_config_source }}"
-      dest: "{{ rclone_config_path }}"
+      dest: "{{ rclone_config_path }}"/rclone.conf
       mode: 0644
-
