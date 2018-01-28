@@ -2,6 +2,9 @@
 # wognet.lan public keys
 #------------------------
 
+# sMac - Vinz
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDhuf86J8fEl1pSG5H87Yn/IuL8voDkBs6jVrNntC23E86PPyRml/oLW8y4e0/eNTm/gcceQVw8Mlr1M5+INTChHpIf/MNj3NiwN2R6N3X0rOu5i/3VdcEBZCjnvJWcyJ8xV/x93kwiFW6Diyg9kyhuXSHs9wOw2PEiP7/h2Lf4Wh2XQT4pV9AOt5AgUVN8KgvbFNgJytMjg7+xnCq3yQutei3zOCUa9OjmaMjD/4leWe2W3wOz3Ct1tXA79HdFKKdK8NxM2EVGHsK0m4argrYRLrgrEyqlTs9r/gyKyyKLRzwB34IsHDOEMW8BnJH0h+da75S7XZrFizS4VbjlJVI1 vinz@sMac.local
+
 # xMac - Vinz
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl8PmwbPbBu/6/aIXkCyg16ul5RikRAqzSNsHjnIbyFp1E8jBEds1Ff2shn9qr5Oku/8P+A9SSYOo17v9K5guHHew6AwNnGpfsi4tho+0nn26lyvN39k5VJGJnvMZUsRyV+hyP/+CHmO1mKAnQRKQDoaRc9fqwr/VQEx0Oj64yo6n2RE13MTiUakzpTqwGfokvjcnSppvy8nAd45rDoOoC8LCIE25JQUlg+TG6mouhMX1dN9liHzasn2MvE6O8pitcLe4sxhIbY2UMjEHTaJR6ybKzI9gYjAzASmQv8NTqa/StFEhJsU4IyrM0GYKndex/uKy0Ehsowvr1g/RAKNEt Vinz@xMac.local
 

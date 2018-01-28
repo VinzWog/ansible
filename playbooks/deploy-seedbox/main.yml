@@ -29,28 +29,27 @@
       mkvtoolnix_apt_repo: "deb https://mkvtoolnix.download/ubuntu/xenial/ ./"
 
     tasks:
-      - name: Load vault
-        include_vars: vault-seedbox.yml
-        no_log: true
+     - name: Load vault
+       include_vars: vault-seedbox.yml
+       no_log: true
 
+     - name: Prepare system
+       include_tasks: configure-sytem.yml
 
-#      - name: Prepare system
-#        include_tasks: configure-sytem.yml
+     - name : Install Rclone
+       include_role:
+         name: stefangweichinger.ansible-rclone
+       become: yes
 
-#      - name : Install Rclone
-#        include_role:
-#          name: stefangweichinger.ansible-rclone
-#        become: yes
-#
-#      - name: Configure Rclone
-#        include_tasks: configure-rclone.yml
-#
-#      - name: Configure Rclone Google Drive
-#        include_tasks: configure-rclone-drives.yml
-#        vars:
-#          rclone_connection_description: Google Drive
-#          rclone_connection_name: GD
-#          rclone_mount_point: {{ rclone_GD_mount }}
+     - name: Configure Rclone
+       include_tasks: configure-rclone.yml
+
+     - name: Configure Rclone Google Drive
+       include_tasks: configure-rclone-drives.yml
+       vars:
+         rclone_connection_description: Google Drive
+         rclone_connection_name: GD
+         rclone_mount_point: {{ rclone_GD_mount }}
 #
 #      - name: Configure Rclone Amazon Cloud Drive
 #        include_tasks: configure-rclone-drives.yml
@@ -59,30 +58,30 @@
 #          rclone_connection_name: ACD
 #          rclone_mount_point: {{ rclone_ACD_mount }}
 
-#      - name: Install PlexDrive
-#        include_tasks: configure-plexdrive.yml
+     - name: Install PlexDrive
+       include_tasks: configure-plexdrive.yml
 
-      - name : Install Docker
-        include_role:
-          name: angstwad.docker_ubuntu
-        vars:
-          docker_group_members:
-          - "{{ ansible_ssh_user }}"
-        become: yes
+     - name : Install Docker
+       include_role:
+         name: angstwad.docker_ubuntu
+       vars:
+         docker_group_members:
+         - "{{ ansible_ssh_user }}"
+       become: yes
 
-#      - name: Set up docker-compose
-#        include_tasks: configure-containers.yml
-#
-#      - name: Spin up "docker composed" apps
-#        docker_service:
-#          project_src: "{{ global_install_path }}/seedbox-docker-services"
-#          state: present
+     - name: Set up docker-compose
+       include_tasks: configure-containers.yml
 
-#      - name: Configure Deluge
-#        include_tasks: configure-deluge.yml
-#
-#      - name: Configure Sonarr
-#        include_tasks: configure-sonarr.yml
+     - name: Spin up "docker composed" apps
+       docker_service:
+         project_src: "{{ global_install_path }}/seedbox-docker-services"
+         state: present
 
-#      - name: Configure Muxing
-#        include_tasks: configure-muxing.yml
+     - name: Configure Deluge
+       include_tasks: configure-deluge.yml
+
+     - name: Configure Sonarr
+       include_tasks: configure-sonarr.yml
+
+     - name: Configure Muxing
+       include_tasks: configure-muxing.yml
