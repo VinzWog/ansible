@@ -49,8 +49,8 @@
        vars:
          rclone_connection_description: Google Drive
          rclone_connection_name: GD
-         rclone_mount_point: {{ rclone_GD_mount }}
-#
+         rclone_mount_point: "{{ rclone_GD_mount }}"
+
 #      - name: Configure Rclone Amazon Cloud Drive
 #        include_tasks: configure-rclone-drives.yml
 #        vars:
@@ -76,6 +76,7 @@
        docker_service:
          project_src: "{{ global_install_path }}/seedbox-docker-services"
          state: present
+       become: yes
 
      - name: Configure Deluge
        include_tasks: configure-deluge.yml
