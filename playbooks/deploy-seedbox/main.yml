@@ -15,7 +15,7 @@
       plexdrive_dl_url: https://github.com/dweidenfeld/plexdrive/releases/download/5.0.0/plexdrive-linux-amd64
       plexdrive_mount: /mnt/PlexDrive
       rclone_config_source: ~/Documents/RClone/rclone.conf.txt
-      rclone_config_path: "{{ global_config_path }}/rclone/"
+      rclone_config_path: "{{ global_config_path }}/rclone/rclone.conf"
       rclone_ACD_mount: /mnt/AmazonCloudDrive
       rclone_GD_mount: /mnt/GoogleDrive
       rclone_DB_mount: /mnt/Dropbox
