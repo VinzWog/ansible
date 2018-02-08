@@ -1,9 +1,0 @@
-#####
-# Variables for Ubuntu hosts
-#####
-
-BASIC_PACKAGES:
- - python
- - python-selinux
- - man
- - vim

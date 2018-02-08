@@ -1,0 +1,9 @@
+### ansible-playbook playbooks/install-python/main.yml -i ~/Documents/Ansible/hosts --extra-vars "target=ansible-test" --vault-password-file ~/Documents/Ansible/vault.txt -u root -k
+---
+  - name: Install Python
+    hosts: '{{ target }}'
+    gather_facts: False
+
+    tasks:
+     - name: install python 2
+       raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
