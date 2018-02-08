@@ -7,8 +7,7 @@
     name: "{{ GENERIC_DEPLOY_USERNAME }}"
     state: present
     gid: 1010
-  become: yes
-    
+
 - name: Add user
   user:
     name: "{{ GENERIC_DEPLOY_USERNAME }}"
@@ -16,27 +15,11 @@
     shell: /bin/bash
     uid: 1010
     group: vinz
-  become: yes
 
 - name: Install sudo
   package:
     name: sudo
     state: latest
-  become: yes
-  
-#- name: Install python bindings for Debian/Ubuntu
-#  package:
-#    name: python-selinux
-#    state: latest
-#  become: yes
-#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-#  
-#- name: Install python bindings for CentOS
-#  package:
-#    name: libselinux-python
-#    state: latest
-#  become: yes
-#  when: ansible_distribution == 'CentOS'
 
 - name: Configure deploy user in sudoers file
   lineinfile:
@@ -44,7 +27,6 @@
     state: present
     regexp: "^{{ GENERIC_DEPLOY_USERNAME }} ALL"
     line: "{{ GENERIC_DEPLOY_USERNAME }} ALL=(ALL) ALL"
-  become: yes
 
 - name : Create SSH directory
   file:
@@ -62,7 +44,6 @@
     owner: "{{ GENERIC_DEPLOY_USERNAME }}"
     group: "{{ GENERIC_DEPLOY_USERNAME }}"
     mode: 0644
-  become: yes
 
 - name: Add curent user pubkey to authorized_keys file (if not already exists)
   authorized_key:
@@ -70,4 +51,3 @@
     key: "{{ item }}"
   with_file:
     - ~/.ssh/id_rsa.pub
-  become: yes
