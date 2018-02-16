@@ -4,6 +4,6 @@
 *.pyc
 *.inv*
 *.inv
-*/roles/external/*
+roles/externals/*
 oauth*
 *.db
