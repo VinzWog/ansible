@@ -5,3 +5,6 @@
 
 - name: stefangweichinger.ansible-rclone
   src: git+https://github.com/stefangweichinger/ansible-rclone.git
+
+- name: Benaud12.docker-pi
+  src: git+https://github.com/Benaud12/docker-pi.git

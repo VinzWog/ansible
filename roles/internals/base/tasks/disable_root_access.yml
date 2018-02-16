@@ -9,7 +9,6 @@
     line: "PasswordAuthentication no"
     force: yes
     state: present
-  become: yes
   notify: Reload SSH
 
 - name: Root access with SSH Key Only
@@ -19,5 +18,4 @@
     line: "PermitRootLogin prohibit-password"
     force: yes
     state: present
-  become: yes
   notify: Reload SSH

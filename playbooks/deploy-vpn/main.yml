@@ -1,0 +1,46 @@
+### ansible-playbook playbooks/deploy-vpn/main.yml -i ~/Documents/Ansible/hosts --vault-password-file ~/Documents/Ansible/vault.txt -K
+
+---
+  - name: Deploy a vpn router on raspberry pi
+    hosts: raspi-vpn
+
+    vars:
+      locale: en_US.UTF-8
+      timezone: Europe/Paris
+      user_uid: 1010
+      user_gid: 1010
+      global_install_path: "/home/{{ ansible_ssh_user }}"
+      global_config_path: "/home/{{ ansible_ssh_user }}/.config"
+      # dnsmask_config_path: "{{ global_config_path }}/dnsmask"
+      # caddy_config_path: "{{ global_config_path }}/caddy"
+      # sniproxy_config_path: "{{ global_config_path }}/sniproxy"
+      # required_packages:
+      #   - python-dev
+      #   - python-pip
+
+    tasks:
+     # - name: Load vault
+     #   include_vars: vault-seedbox.yml
+     #   no_log: true
+
+
+      # - name: Deploy required packages
+      #   include_tasks: deploy_required_packages.yml
+      #   become: yes
+
+      - name : Install Docker
+        include_role:
+          name: angstwad.docker_ubuntu
+        vars:
+          docker_group_members:
+          - "{{ ansible_ssh_user }}"
+        become: yes
+
+      - name: Set up docker-compose
+        include_tasks: configure-containers.yml
+
+      - name: Spin up "docker composed" apps
+        docker_service:
+          project_src: "{{ global_install_path }}/vpn-docker-services"
+          state: present
+        become: yes
