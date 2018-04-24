@@ -55,5 +55,19 @@ services:
       - /tmp/plex:/data
       - {{ download_path }}:/downloads
       - {{ plexdrive_mount }}/Hulk:/Hulk:ro
-      
+  netatalk:
+    image: cptactionhank/netatalk
+    container_name: netatalk
+    network_mode: host
+#    ports:
+#      - "589:589"
+    environment:
+      - AFP_USER={{ afp_user }}
+      - AFP_PASSWORD={{ afp_password }}
+      - AFP_UID={{ afp_user_uid }}
+      - AFP_GID={{ afp_user_gid }}
+    volumes:
+      - /home/{{ afp_user }}:/media/share
+    restart: always
+
       
