@@ -8,3 +8,6 @@
 
 - name: Benaud12.docker-pi
   src: git+https://github.com/Benaud12/docker-pi.git
+  
+- name: ansible-deploy-xwiki-tomcat-postgresql
+  src: git+https://github.com:zwindler/ansible-deploy-xwiki-tomcat-postgresql.git
