@@ -1,0 +1,179 @@
+---
+- name: Update packages
+  yum: name=* state=latest
+
+- name: Install JDK, PostgreSQL, pip
+  yum: 
+    name: "{{ item }}"
+    state: installed
+  with_items:
+    - "{{ jdk_version }}"
+    - postgresql-server
+    - postgresql-contrib
+    - python-pip
+    - unzip
+    - sudo
+
+- name: add psycopg2 for PostgreSQL
+  pip:
+    name: psycopg2
+
+- name: Configure postgresql for the first time
+  shell: initdb /var/lib/pgsql/data > /var/lib/pgsql/initdb.log
+  args:
+    creates: /var/lib/pgsql/initdb.log
+  become: true
+  become_user: postgres
+
+- name: Allow localhost connection on postgresql
+  lineinfile: 
+    path: /var/lib/pgsql/data/pg_hba.conf
+    regexp: "host    all             all             127.0.0.1/32"
+    line: "host    all             all             127.0.0.1/32            md5"
+    backrefs: yes
+  notify: "notify pgsql for restart"
+
+- name: Allow localhost connection op postgresql (2)
+  lineinfile:
+    path: /var/lib/pgsql/data/pg_hba.conf
+    regexp: "local   all             all"
+    line: "local   all             all                                     trust"
+    backrefs: yes
+  notify: "notify pgsql for restart"
+
+- name: "Flush handlers"
+  meta: flush_handlers
+
+- name: Start and enable postgresql service
+  systemd:
+    state: started
+    enabled: yes
+    daemon_reload: yes
+    name: postgresql
+
+- name: Create xwiki postgreSQL user
+  postgresql_user: 
+    name: xwiki
+    password: "{{ xwiki_password }}"
+  become: true
+  become_user: postgres
+
+- name: Create xwiki postgreSQL database
+  postgresql_db:
+    name: xwiki
+    owner: xwiki
+    encoding: unicode
+    template: template0
+  become: true
+  become_user: postgres
+
+- name: Create tomcat group
+  group: 
+    name: tomcat8
+
+- name: Create tomcat user
+  user:
+    name: tomcat8
+    group: tomcat8
+    shell: /bin/false 
+    home: /home/tomcat8
+
+- name: Get tomcat dist from apache website
+  unarchive:
+    src: http://apache.mirrors.ovh.net/ftp.apache.org/dist/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+    validate_certs: false
+    dest: /var/lib
+    remote_src: yes
+
+- name: Change owner
+  file: 
+    path: /var/lib/apache-tomcat-{{ tomcat_version }}
+    owner: tomcat8
+    group: tomcat8
+    recurse: yes
+    state: directory
+
+- name: Create link for tomcat
+  file: 
+    src: /var/lib/apache-tomcat-{{ tomcat_version }}
+    dest: "{{ tomcat8_path }}"
+    state: link
+
+- name: Clean ROOT directories in tomcat (default applications)
+  file:
+    path: "{{ tomcat8_path }}/webapps/ROOT"
+    state: absent
+  when: clean_tomcat_ROOT
+
+- name: Clean xwiki directories in tomcat
+  file:
+    path: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}"
+    state: absent
+  when: clean_tomcat_xwiki
+
+- name: Create an empty dir
+  file:
+    path: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}"
+    owner: tomcat8
+    group: tomcat8
+    state: directory
+
+- name: Copy unit file
+  template: 
+    src: tomcat8.service.j2
+    dest: /etc/systemd/system/tomcat8.service
+
+- name: UTF-8 URI encoding
+  lineinfile: 
+    path: "{{ tomcat8_path }}/conf/server.xml"
+    state: present
+    line: '               URIEncoding="UTF-8"'
+    insertafter: "<Connector port=\"8080\" protocol=\"HTTP/1.1\""
+
+- name: add setenv.sh to configure Xmx and ALLOW_ENCODED_SLASH
+  lineinfile:
+    path: "{{ tomcat8_path }}/bin/setenv.sh"
+    create: yes
+    line: CATALINA_OPTS="-Xmx1024m -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true"
+
+- name: Get and unzip xwiki war
+  unarchive:
+    src: "{{xwiki_artifact_url}}"
+    dest: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}"
+    remote_src: yes
+
+- name: Copy hibernates.xml file
+  template:
+    src: hibernate.cfg.xml.j2
+    dest: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}/WEB-INF/hibernate.cfg.xml"
+
+- name: Add a few lines in xwiki.cfg file
+  lineinfile: 
+    dest: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}/WEB-INF/xwiki.cfg"
+    line: "{{ item }}"
+  with_items:
+    - "xwiki.stats=1"
+    - "xwiki.store.attachment.hint = file"
+    - "xwiki.store.attachment.versioning.hint = file"
+    - "xwiki.store.attachment.recyclebin.hint = file"
+    - "xwiki.data.dir = {{ tomcat8_path }}/work"
+
+- name: Change xwiki.stats.default value
+  lineinfile: 
+    dest: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}/WEB-INF/xwiki.cfg"
+    regexp: "xwiki.stats.default=0"
+    line: "xwiki.stats.default=1"
+    backrefs: yes
+
+- name: Get PostgreSQL JDBC
+  get_url:
+    url: https://jdbc.postgresql.org/download/postgresql-{{ jdbc_postgresql_version }}.jar
+    dest: "{{ tomcat8_path }}/webapps/{{ xwiki_path }}/WEB-INF/lib/"
+    validate_certs: false
+
+- name: Start and enable tomcat8
+  systemd:
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+    name: tomcat8

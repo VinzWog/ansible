@@ -1,0 +1,17 @@
+[Unit]
+Description=Apache Tomcat 8 Servlet Container
+After=syslog.target network.target
+ 
+[Service]
+User=tomcat8
+Group=tomcat8
+Type=forking
+Environment=CATALINA_PID={{ tomcat8_path }}/tomcat.pid
+Environment=CATALINA_HOME={{ tomcat8_path }}
+Environment=CATALINA_BASE={{ tomcat8_path }}
+ExecStart={{ tomcat8_path }}/bin/startup.sh
+ExecStop={{ tomcat8_path }}/bin/shutdown.sh
+Restart=on-failure
+ 
+[Install]
+WantedBy=multi-user.target
