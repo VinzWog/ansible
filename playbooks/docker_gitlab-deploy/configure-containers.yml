@@ -1,10 +1,10 @@
 ---
     - name: Create directory for docker-compose
       file:
-        path: "{{ global_install_path }}/seedbox-docker-services"
+        path: "{{ global_install_path }}/docker-gitlab"
         state: directory
 
     - name: Copy Docker Compose file
       template:
         src: tpl_docker-compose.yml
-        dest: "{{ global_install_path }}/seedbox-docker-services/docker-compose.yml"
+        dest: "{{ global_install_path }}/docker-gitlab/docker-compose.yml"
