@@ -6,5 +6,5 @@
 
     - name: Copy Docker Compose file
       template:
-        src: tpl_docker-compose.yml
+        src: tpl_docker-compose_gitlab.yml
         dest: "{{ global_install_path }}/docker-gitlab/docker-compose.yml"
