@@ -1,5 +1,5 @@
-### ansible-playbook playbooks/docker_gitlab-deploy/main.yml -i hosts --vault-password-file vault
-### ansible-playbook playbooks/docker_gitlab-deploy/main.yml -i hosts --extra-vars "target=ansible-test"
+### ansible-playbook playbooks/docker_gitlab-deploy/main.yml -i hosts --vault-password-file vault -K
+### ansible-playbook playbooks/docker_gitlab-deploy/main.yml -i hosts --extra-vars "target=ansible-test" -K
 ---
   - name: Deploy gitlab in a Docker container
     hosts: gitlab
@@ -11,7 +11,6 @@
       user_uid: 1010
       user_gid: 1010
       global_install_path: "/home/{{ ansible_user_id }}/"
-      #gitlab_hostname:
 
     tasks:
      - name: Load vault
