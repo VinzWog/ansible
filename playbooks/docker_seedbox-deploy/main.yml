@@ -1,5 +1,5 @@
-### ansible-playbook playbooks/deploy-seedbox/main.yml -i hosts --vault-password-file vault
-### ansible-playbook playbooks/deploy-seedbox/main.yml -i hosts --extra-vars "target=ansible-test"
+### ansible-playbook playbooks/docker_seedbox-deploy/main.yml -i hosts --vault-password-file vault
+### ansible-playbook playbooks/docker_seedbox-deploy/main.yml -i hosts --extra-vars "target=ansible-test"
 ---
   - name: Deploy a full seedbox
     hosts: seedbox
