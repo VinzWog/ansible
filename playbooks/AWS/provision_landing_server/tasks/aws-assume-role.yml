@@ -1,0 +1,17 @@
+---
+# Assume an existing role
+- name: Assume an existing role
+  sts_assume_role:
+    role_arn: {{ ROLE_ARN }}
+    role_session_name: {{ SESSION_NAME }}
+  register: assumed_role
+
+# Use the assumed role above to tag an instance in account 123456789012
+ec2_tag:
+  aws_access_key: "{{ assumed_role.sts_creds.access_key }}"
+  aws_secret_key: "{{ assumed_role.sts_creds.secret_key }}"
+  security_token: "{{ assumed_role.sts_creds.session_token }}"
+  resource: i-xyzxyz01
+  state: present
+  tags:
+    MyNewTag: value

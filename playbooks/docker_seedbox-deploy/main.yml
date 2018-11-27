@@ -38,7 +38,7 @@
 
      - name : Install Rclone
        include_role:
-         name: stefangweichinger.ansible-rclone
+         name: aws_auth
        become: yes
 
      - name: Configure Rclone

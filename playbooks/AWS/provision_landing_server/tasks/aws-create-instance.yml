@@ -1,0 +1,32 @@
+---
+- name: Provision EC2 Instance
+  ec2:
+     key_name: "{{ EC2_KEYPAIR }}"
+     group: "{{ EC2_SECURITY_GROUP }}"
+     instance_type: "{{ EC2_INSTANCE_TYPE }}"
+     image: "{{ EC2_AMI_ID }}"
+     wait: true
+     region: "{{ AWS_REGION }}"
+     vpc_subnet_id: " {{ EC2_SUBNET_ID }}"
+     assign_public_ip: yes
+  register: ec2
+
+- name: Add new instance to host group
+  add_host:
+    hostname: "{{ item.public_dns_name }}"
+    groupname: launched
+    ansible_ssh_private_key_file: "{{ LANDING_SSH_KEY }}"
+    ansible_user: "{{ LANDING_SSH_USER }}"
+    gather_facts: false
+  with_items: "{{ ec2.instances }}"
+
+# DEBUG: Display variables content
+- debug: msg="{{ item.public_dns_name }}"
+  with_items: "{{ ec2.instances }}"
+
+# - name: Wait for SSH to come up
+#   delegate_to: "{{ item.public_dns_name }}"
+#   wait_for_connection:
+#     delay: 60
+#     timeout: 60
+#   with_items: "{{ ec2.instances }}"

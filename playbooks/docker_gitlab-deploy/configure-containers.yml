@@ -4,6 +4,10 @@
         path: "{{ global_install_path }}/docker-gitlab"
         state: directory
 
+    - name: Register public IP
+      shell: wget -qO- http://ipecho.net/plain ; echo
+      register: host_ip
+
     - name: Copy Docker Compose file
       template:
         src: tpl_docker-compose_gitlab.yml
