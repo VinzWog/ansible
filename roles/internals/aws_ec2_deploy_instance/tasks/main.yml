@@ -1,0 +1,8 @@
+---
+- name: Activate AWS authentication
+  include_tasks: aws-setup-auth.yml
+  connection: local
+
+- name: Provision EC2 Instance
+  include_tasks: aws-create-instance.yml
+  connection: local
