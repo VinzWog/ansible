@@ -19,7 +19,10 @@
 
     # DEBUG: Display variables content
     - debug:
-        msg: "SRC: /ndh/landing/ctlm/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }} - DEST: /AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
+        msg: "SRC: /ndh/landing/control-m/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}
+
+    - debug:
+        msg: "DEST: /AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
 
     - name: Simple PUT operation
       aws_s3:
@@ -27,6 +30,6 @@
         # aws_secret_key: "{{ VAULT_AWS_SECRET_ACCESS_KEY }}"
         region: "{{ AWS_REGION }}"
         bucket: "{{ S3_BUCKET }}"
-        src: "/ndh/landing/ctlm/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}"
+        src: "/ndh/landing/control-m/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}"
         object: "/AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
         mode: put
