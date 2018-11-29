@@ -24,5 +24,5 @@
     - name: Provision EC2 Instance
       include_tasks: tasks/aws-create-instance.yml
 
-    # - name: Configuring source folders on landing server
-    #   include_tasks: tasks/landing-setup.yml
+    - name: Configuring source folders on landing server
+      include_tasks: tasks/landing-setup.yml
