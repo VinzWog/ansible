@@ -17,12 +17,12 @@
     - name: Activate AWS authentication
       include_tasks: tasks/aws-setup-auth.yml
 
-    # DEBUG: Display variables content
-    - debug:
-        msg: "SRC: /ndh/landing/control-m/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}
-
-    - debug:
-        msg: "DEST: /AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
+    # # DEBUG: Display variable content
+    # - debug:
+    #     msg: "SRC: /ndh/landing/control-m/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}"
+    # # DEBUG: Display variable content
+    # - debug:
+    #     msg: "DEST: /AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
 
     - name: Simple PUT operation
       aws_s3:
