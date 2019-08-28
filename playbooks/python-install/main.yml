@@ -1,4 +1,4 @@
-### ansible-playbook playbooks/install-python/main.yml -i ~/Documents/Ansible/hosts --extra-vars "target=ansible-test" --vault-password-file ~/Documents/Ansible/vault.txt -u root -k
+### ansible-playbook ~/Documents/GitHub/ansible/playbooks/python-install/main.yml -i ~/Documents/Ansible/hosts --extra-vars "target=prometheus" --vault-password-file ~/Documents/Ansible/vault.txt -u "ansible_user"
 ---
   - name: Install Python
     hosts: '{{ target }}'
@@ -7,3 +7,4 @@
     tasks:
      - name: install python 2
        raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+       become: yes

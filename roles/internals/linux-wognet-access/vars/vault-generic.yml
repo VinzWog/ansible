@@ -1,0 +1,10 @@
+#####
+# Vault file for generic role
+#####
+
+USERNAME: vinz
+GROUPNAME: "{{ USERNAME }}"
+
+# Created with :
+# python -c 'import crypt; print crypt.crypt("[password]", "$1$vfqdhbgfqejfqdkdljnklmdfwq$")'
+PASSWORD: $1$vfqdhbgf$9Kr6f31EIAoHDcFjAIx5o0

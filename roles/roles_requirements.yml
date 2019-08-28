@@ -1,4 +1,4 @@
-### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
+### ansible-galaxy install -r ~/Documents/GitHub/ansible/roles/roles_requirements.yml -p ~/Documents/GitHub/ansible/roles/externals/
 
 - name: angstwad.docker_ubuntu
   src: git+https://github.com/angstwad/docker.ubuntu.git
@@ -8,3 +8,6 @@
 
 - name: Benaud12.docker-pi
   src: git+https://github.com/Benaud12/docker-pi.git
+
+- name: cloudalchemy.prometheus
+  src: git+https://github.com/cloudalchemy/ansible-prometheus.git
