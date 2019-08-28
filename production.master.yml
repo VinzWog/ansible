@@ -3,3 +3,7 @@
 - hosts: base
   roles:
     - base
+
+- hosts: docker
+  roles:
+    - angstwad.docker_ubuntu

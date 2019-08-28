@@ -9,6 +9,5 @@
 
   - name: Install basic packages
     apt:
-      name: "{{ item }}"
+      name: "{{ basic_packages }}"
       state: latest
-    with_items: "{{ basic_packages }}"

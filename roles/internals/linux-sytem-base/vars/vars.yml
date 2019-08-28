@@ -1,0 +1,8 @@
+#####
+# Generic Variables
+#####
+
+basic_packages:
+  - sudo
+  - man
+  - vim
