@@ -1,4 +1,4 @@
-### ansible-galaxy install -r ~/Documents/GitHub/ansible/roles/roles_requirements.yml -p ~/Documents/GitHub/ansible/roles/externals/
+### ansible-galaxy install -r ./roles_requirements.yml -p ./externals/
 
 - name: angstwad.docker_ubuntu
   src: git+https://github.com/angstwad/docker.ubuntu.git
@@ -11,3 +11,9 @@
 
 - name: cloudalchemy.prometheus
   src: git+https://github.com/cloudalchemy/ansible-prometheus.git
+
+- name: cloudalchemy.ansible-node-exporter
+  src: git+https://github.com/cloudalchemy/ansible-node-exporter.git
+
+- name: dev-sec.os-hardening
+  src: git+https://github.com/dev-sec/ansible-os-hardening
