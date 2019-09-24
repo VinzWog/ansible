@@ -1,7 +1,0 @@
-#####
-# Generic Variables
-#####
-
-basic_packages:
-  - man
-  - vim

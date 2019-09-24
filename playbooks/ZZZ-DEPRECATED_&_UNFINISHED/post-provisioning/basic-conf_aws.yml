@@ -1,5 +1,0 @@
-- hosts: aws
-
-  roles:
-  - docker-host
-  - rclone

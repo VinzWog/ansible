@@ -1,9 +1,0 @@
-#####
-# Tasks to deploy_required_packages
-#####
-
-    # - name: Install required packages
-    #   apt:
-    #     name: "{{ item }}"
-    #     state: latest
-    #   with_items: "{{ required_packages }}"
