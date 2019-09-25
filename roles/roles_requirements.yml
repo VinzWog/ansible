@@ -1,4 +1,4 @@
-### ansible-galaxy install -r ./roles_requirements.yml -p ./externals/
+### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
 
 - name: angstwad.docker_ubuntu
   src: git+https://github.com/angstwad/docker.ubuntu.git
