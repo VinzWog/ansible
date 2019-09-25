@@ -1,9 +1,0 @@
-### ansible-playbook production.master.yml -i ~/Documents/hosts --vault-password-file ~/Documents/vault.txt
-
-- hosts: base
-  roles:
-    - base
-
-- hosts: docker
-  roles:
-    - angstwad.docker_ubuntu
