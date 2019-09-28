@@ -6,3 +6,4 @@ basic_packages:
   - sudo
   - man
   - vim
+  - fail2ban
