@@ -1,0 +1,7 @@
+[proxmox-webui]
+enabled   = true
+port      = https,http,8006
+filter    = proxmox-webui
+logpath   = /var/log/daemon.log
+maxretry  = 5
+bantime   = 3600
