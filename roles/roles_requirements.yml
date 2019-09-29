@@ -17,3 +17,6 @@
 
 - name: dev-sec.os-hardening
   src: git+https://github.com/dev-sec/ansible-os-hardening
+
+- name: dgeerlingguy.pip
+  src: git+https://github.com/geerlingguy/ansible-role-pip

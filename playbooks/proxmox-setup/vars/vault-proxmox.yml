@@ -1,0 +1,6 @@
+# Variables vault for Proxmox playbook
+#
+proxmox_user: root@pam
+proxmox_pass: 3XrBqfGbu7TjeTk
+proxmox_adress: sam.wognet.fr
+proxmox_node: sam
