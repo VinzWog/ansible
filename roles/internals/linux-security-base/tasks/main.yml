@@ -1,0 +1,6 @@
+#####
+# Main task file for Linux security basic role
+#####
+
+- name: Disable root access
+  include_tasks: disable_root_access.yml
