@@ -31,10 +31,15 @@
         name: linux-ansible-access
     - name: Apply Linux system basic role
       include_role:
-        name: linux-sytem-base
+        name: linux-system-base
     - name: Apply Linux security basic role
       include_role:
         name: linux-security-base
+    - name: Deploy docker
+      include_role:
+        name: angstwad.docker_ubuntu
+        apply:
+          become: yes
 
 - name: Secure GCP host
   hosts: gce-launched
@@ -49,7 +54,7 @@
   tasks:
     - name: Apply Linux system basic role
       include_role:
-        name: linux-sytem-base
+        name: linux-system-base
     - name: Apply OS hardening role
       include_role:
         name: dev-sec.os-hardening
