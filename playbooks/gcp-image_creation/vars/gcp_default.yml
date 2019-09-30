@@ -1,0 +1,18 @@
+## Vault variables
+# GCP_SERVICE_ACCOUNT_EMAIL:
+# GCP_AUTH_FILE:
+# GCP_PROJECT:
+
+INVENTORY_DIR: ../../inventories/gcp-image_creation/dynamic
+
+## Environnement settings for default
+GCP_REGION: australia-southeast1
+GCP_ZONE: australia-southeast1-b
+GCP_AUTH_KIND: serviceaccount
+
+# Vars for gcp-create-instance.yml tasks
+GCP_INSTANCE_NAME: instance-image-generation
+GCP_INSTANCE_TYPE: n1-standard-1
+GCP_INSTANCE_STANDARD_IMAGE: ubuntu-1804
+GCP_INSTANCE_DISK_SIZE_GB: 10
+GCP_INSTANCE_CREATED_IMAGE: capgemini-quasar-ubuntu-1804
