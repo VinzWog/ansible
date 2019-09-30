@@ -1,0 +1,77 @@
+### ansible-playbook playbooks/gcp-image_creation/main.yml -i hosts --vault-password-file vault
+
+---
+- name: Create GCP host
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  vars:
+      VARS_ENV: vars/gcp_default.yml
+  tasks:
+    - name: Load environment variables
+      include_vars: "{{ VARS_ENV }}"
+
+    - name: Load vault
+      include_vars: vars/vault-quasar.yml
+      no_log: true
+
+    - name: Provision Instance
+      include_tasks: tasks/gcp-create-instance.yml
+
+- name: Configure GCP host
+  hosts: gce-launched
+  vars:
+    PUBKEY_DIR: ../../vars/public_keys
+    node_exporter_version: latest
+    node_exporter_system_group: prometheus
+    node_exporter_system_user: prometheus
+  tasks:
+    - name: Configure Ansible access
+      include_role:
+        name: linux-ansible-access
+    - name: Apply Linux system basic role
+      include_role:
+        name: linux-sytem-base
+    - name: Apply Linux security basic role
+      include_role:
+        name: linux-security-base
+
+- name: Secure GCP host
+  hosts: gce-launched
+  vars:
+    os_auth_pw_max_age: 99999
+    os_auth_timeout: 120
+    os_auth_pam_passwdqc_enable: false
+    ufw_manage_defaults: false
+    sysctl_overwrite:
+      # Enable IPv4 traffic forwarding (required for Docker/K8s)
+      net.ipv4.ip_forward: 1
+  tasks:
+    - name: Apply Linux system basic role
+      include_role:
+        name: linux-sytem-base
+    - name: Apply OS hardening role
+      include_role:
+        name: dev-sec.os-hardening
+        apply:
+          become: yes
+
+- name: Monitor GCP host
+  hosts: gce-launched
+#  vars:
+  tasks:
+    - name: Deploy Prometheus
+      include_role:
+        name: cloudalchemy.prometheus
+    - name: Deploy Node Exporter
+      include_role:
+        ## If error on "Get checksum list from github" task, run:
+        ## export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+        name: cloudalchemy.ansible-node-exporter
+
+- name: Create GCP Image
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+    - include_tasks: tasks/gcp-create-image.yml
