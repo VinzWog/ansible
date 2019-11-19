@@ -1,0 +1,28 @@
+#####
+# Main task file for acd_cli role
+#####
+
+############
+#PREREQUESITE
+############
+# Visit https://tensile-runway-92512.appspot.com
+# Sign in with Amazon account
+# Authorize the application and place the downloaded oauth_data in ./vars/ prior to running the role
+### Credits :
+# https://github.com/jfouchard/ansible-role-acd-cli/blob/master/tasks/main.yml
+###
+
+- name: Load vault
+  include_vars: vault-acd_cli.yml
+  no_log: true
+
+- name: Include common variables
+  include_vars: vars-common.yml
+
+- debug:
+   msg: '====| PLAY : deploy_required_packages |===='
+- import_tasks: deploy_required_packages.yml
+
+- debug:
+   msg: '====| PLAY : configure_acd_cli |===='
+- import_tasks: configure_acd_cli.yml

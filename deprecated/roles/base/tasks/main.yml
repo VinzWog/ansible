@@ -1,0 +1,22 @@
+#####
+# Main task file for base role
+#####
+
+- name: Include generic variables
+  include_vars: vars.yml
+
+- name: Load vault
+  include_vars: vault-generic.yml
+  no_log: true
+
+- name: Deploy basics packages
+  import_tasks: deploy_basic_packages.yml
+  become: yes
+
+- name: Configure user access
+  import_tasks: configure_user_access.yml
+  become: yes
+
+- name: Disable root access
+  import_tasks: disable_root_access.yml
+  become: yes

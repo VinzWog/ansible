@@ -1,0 +1,21 @@
+---
+    - name: Stop Sonarr container
+      docker_container:
+        name: sonarr
+        state: stopped
+
+    - name: Clean Sonarr config directory
+      shell: "rm -f {{ sonarr_config_path }}/*.db* }}"
+      
+    - shell: "rm -f {{ sonarr_config_path }}/config.xml }}"
+
+    - name: Restore Sonarr database
+      copy:
+        src:  "{{ sonarr_db_source}}"
+        dest: "{{ sonarr_config_path }}/nzbdrone.db"
+        mode: 0644
+        
+    - name: Start Sonarr container
+      docker_container:
+        name: sonarr
+        state: started

@@ -1,0 +1,25 @@
+---
+- name: Deploy prometheus
+  hosts: monitoring
+
+  vars:
+    # AWS_REGION: ap-southeast-2
+    # EC2_INSTANCE_TYPE: t2.micro
+    # EC2_SECURITY_GROUP: ansible-ssh
+    # EC2_AMI_ID: ami-e2021d81
+    # EC2_KEYPAIR: xmac
+    # EC2_SUBNET_ID: subnet-9e251df9
+    # EC2_SSH_KEY: ~/.ssh/id_rsa
+    # EC2_SSH_USER: ubuntu
+
+  tasks:
+    # - name: Load environment variables
+    #   include_vars: vars.yml
+
+    # - name: Load vault
+    #   include_vars: vault.yml
+    #   no_log: true
+
+    - name : Create the instance
+      include_role:
+        name: cloudalchemy.prometheus

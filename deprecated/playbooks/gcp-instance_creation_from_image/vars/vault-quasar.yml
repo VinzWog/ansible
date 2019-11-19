@@ -1,0 +1,5 @@
+# Vault file for GCP
+
+GCP_SERVICE_ACCOUNT_EMAIL: ansible@quasar-232301.iam.gserviceaccount.com
+GCP_AUTH_FILE: /Users/vinz/Documents/GCP/Quasar/quasar-232301-Ansible.json
+GCP_PROJECT: quasar-232301

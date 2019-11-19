@@ -1,0 +1,87 @@
+##
+# ansible-playbook pcloud_pfs-deploy-Ubuntu-16.04.yml --extra-vars "target=host" --ask-vault-pass --ask-sudo-pass
+##
+
+- hosts: '{{ target }}'
+
+  remote_user: vinz
+  become: yes
+
+  vars:
+    DELUGE_USER: deluge
+    WOGNET_DELUGE_FILE_DIR: vars
+    PFS_MOUNT_DIRECTORY: /mnt/pcloud-pfs
+    PFS_MOUNT_SYSTEMD_SCRIPT: template-pfs.service.j2
+
+  tasks: 
+  - name: Load vault
+    include_vars: vars/vault-pcloud.yml
+    no_log: true
+
+  - name: Install required packages
+    package: name={{ item }} state=latest
+    with_items:
+        - make
+        - pkg-config
+        - git
+        - curl
+        - fuse
+        - libssl-dev
+        
+  - name: Clone pcloud pfs git repo
+    git: repo=https://github.com/pcloudcom/pfs.git
+         dest=/tmp/pfs/
+
+  - name: Compile pcloud pfz
+    make: chdir=/tmp/pfs/
+          target=install
+
+#  - name: Configure "fuse.conf" - Allow other
+#    lineinfile: dest=/etc/fuse.conf
+#                regexp="#user_allow_other" line="user_allow_other"
+#                state=present
+#
+#
+  - name: Allow {{ DELUGE_USER }} to execute commands
+    user: name={{ DELUGE_USER }} shell=/bin/bash
+
+  - name : Create pcloud mount directory
+    action: file path={{ PFS_MOUNT_DIRECTORY }}
+            state=directory
+            owner={{ DELUGE_USER }} group={{ DELUGE_USER }} mode=0766
+
+  - name: Get pCloud Token
+    uri: url="https://api.pcloud.com/userinfo?getauth=1&username={{ PCLOUD_LOGIN }}&password={{ PCLOUD_PASSWORD }}"
+         return_content=yes
+    register: answer
+
+#  - debug: msg="Token is {{ answer.json.auth }}"
+
+  - name: Check for /usr/lib/systemd/system directory
+    file: path=/usr/lib/systemd/system state=directory recurse=yes
+          owner=0 group=0 mode=755
+
+  - name: Use template for pCloud pfs mount SystemD script
+    template: src={{ WOGNET_DELUGE_FILE_DIR }}/{{ PFS_MOUNT_SYSTEMD_SCRIPT }}
+              dest=/usr/lib/systemd/system/pfs.service
+              owner=0 group=0 mode=644
+
+  - replace: dest=/usr/lib/systemd/system/pfs.service regexp='IDENTIFICATION_TOKEN'
+             replace="{{ answer.json.auth }}"
+             backup=yes
+
+  - name: Reload SystemD
+    command: systemctl daemon-reload
+
+  - name: Enable pCloud pfs mount SystemD auto-start
+    command: systemctl enable pfs
+
+  - name: Reboot "{{ inventory_hostname }}"
+    shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+    async: 1
+    poll: 0
+    ignore_errors: true
+
+  - name: Waiting for server to come back
+    local_action: wait_for host={{ ansible_host }} port=22 delay=60 timeout=300
+    become: no

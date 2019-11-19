@@ -1,0 +1,38 @@
+---
+## The status parameter of this module requires at least ansible v2.8
+- name: Stop the instance
+  gcp_compute_instance:
+    auth_kind: serviceaccount
+    service_account_file: "{{ GCP_AUTH_FILE }}"
+    zone: "{{ GCP_ZONE }}"
+    project: "{{ GCP_PROJECT }}"
+    name: "{{ GCP_INSTANCE_NAME }}"
+    status: TERMINATED
+
+- name: Create a disk
+  gcp_compute_disk:
+    name: instance-image-generation
+    auth_kind: serviceaccount
+    service_account_file: "{{ GCP_AUTH_FILE }}"
+    zone: "{{ GCP_ZONE }}"
+    project: "{{ GCP_PROJECT }}"
+    state: present
+  register: disk
+
+- name: Create the custom image
+  gcp_compute_image:
+    auth_kind: serviceaccount
+    service_account_file: "{{ GCP_AUTH_FILE }}"
+    project: "{{ GCP_PROJECT }}"
+    source_disk: "{{ disk }}"
+    name: "{{ GCP_INSTANCE_CREATED_IMAGE }}"
+    state: present
+
+- name: Delete the instance
+  gcp_compute_instance:
+    auth_kind: serviceaccount
+    service_account_file: "{{ GCP_AUTH_FILE }}"
+    zone: "{{ GCP_ZONE }}"
+    project: "{{ GCP_PROJECT }}"
+    name: "{{ GCP_INSTANCE_NAME }}"
+    state: absent

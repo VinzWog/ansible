@@ -1,0 +1,35 @@
+---
+
+- name: Transfert files
+  hosts: landing-server
+
+  vars:
+      vars_env: vars/default.yml
+
+  tasks:
+    - name: Load environment variables
+      include_vars: "{{ vars_env }}"
+
+    - name: Load vault
+      include_vars: vars/vault.yml
+      no_log: true
+
+    - name: Activate AWS authentication
+      include_tasks: tasks/aws-setup-auth.yml
+
+    # # DEBUG: Display variable content
+    # - debug:
+    #     msg: "SRC: /ndh/landing/control-m/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}"
+    # # DEBUG: Display variable content
+    # - debug:
+    #     msg: "DEST: /AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
+
+    - name: Simple PUT operation
+      aws_s3:
+        # aws_access_key: "{ VAULT_AWS_ACCESS_KEY_ID }}"
+        # aws_secret_key: "{{ VAULT_AWS_SECRET_ACCESS_KEY }}"
+        region: "{{ AWS_REGION }}"
+        bucket: "{{ S3_BUCKET }}"
+        src: "/ndh/landing/control-m/{{ CTLM_SOURCE_NAME }}/{{ CTLM_ENTITY_FILENAME }}"
+        object: "/AFS/{{ CTLM_SOURCE_NAME }}/DATA/{{ CTLM_DATE_YEAR }}/{{ CTLM_DATE_MONTH }}/{{ CTLM_DATE_DAY }}/{{ CTLM_ENTITY_NAME }}/{{ CTLM_ENTITY_TYPE }}/{{ CTLM_ENTITY_FILENAME }}"
+        mode: put

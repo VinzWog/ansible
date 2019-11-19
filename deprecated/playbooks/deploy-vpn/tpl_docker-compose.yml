@@ -1,0 +1,13 @@
+---
+version: "2"
+services:
+  gateone:
+    image: liftoff/gateone
+    container_name: gateone
+#    network_mode: host
+    ports:
+      - "443:443"
+    environment:
+      - PUID={{ user_uid }}
+      - PGID={{ user_gid }}
+    restart: always

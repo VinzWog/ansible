@@ -1,0 +1,29 @@
+---
+  - name: Set up and copy service template 
+    template:
+      src: tpl_rclone-mount_service
+      dest: "/etc/systemd/system/rclone-mount-{{ rclone_connection_name }}.service"
+      mode: 0755
+      owner: root
+      group: root
+    become: yes
+
+  - name : Create Rclone mount directory
+    file:
+      path: "{{ rclone_mount_point }}"
+      state: directory
+    become: yes
+
+  - name: Enable and start Rclone service
+    systemd:
+      daemon_reload: yes
+      name: "rclone-mount-{{ rclone_connection_name }}.service"
+      enabled: yes
+      state: started
+    become: yes
+
+  - name: Set up and copy check script 
+    template:
+      src: tpl_rclone_mount_check.sh
+      dest: "{{ global_install_path }}/scripts/rclone-{{ rclone_connection_name }}-mount_check.sh"
+      mode: 0755

@@ -1,0 +1,23 @@
+## Environnement settings for default
+
+AWS_REGION: ap-southeast-2
+
+# Vars for landing-setup.yml tasks
+LANDING_SSH_KEY: ~/.ssh/id_rsa
+LANDING_SSH_USER: ubuntu
+LANDING_SOURCE_DIR: /ndh/landing/ctlm/
+LANDING_SOURCE_LIST:
+  - austin
+  - travel-card
+  - souce3
+
+CTLM_SOURCE_NAME: austin
+CTLM_DATE_YEAR: 2018
+CTLM_DATE_MONTH: 11
+CTLM_DATE_DAY: 27
+CTLM_ENTITY_NAME: loans
+CTLM_ENTITY_TYPE: delta
+CTLM_ENTITY_FILENAME: any-file.name
+
+S3_BUCKET: test-raw-bucket
+ARCHIVES_AGE: 30

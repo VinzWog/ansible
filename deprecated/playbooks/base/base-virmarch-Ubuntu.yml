@@ -1,0 +1,91 @@
+##
+# ansible-playbook base-virmarch-Ubuntu.yml --extra-vars "target=host" --ask-pass --ask-vault-pass
+##
+- hosts: '{{ target }}'
+  remote_user: root
+  #become: yes
+
+  vars:
+    WOGNET_AUTHORIZEDKEYS: ../../pubkeys/wognet-pubkeys.txt
+
+  tasks:
+  - name: Load vault
+    include_vars: vars/vault-base.yml
+    no_log: true
+
+#  - name: Update all packages
+#    package: name=* state=latest
+  
+  - name: Install basic packages
+    package: name={{ item }} state=latest
+    with_items:
+        - man
+        - vim
+        - ufw
+#        - sshguard
+
+  - name: Set system language
+    locale_gen: name=fr_FR.UTF-8 state=present
+
+  - name: Set timezone
+    copy: content='Europe/Paris'
+          dest=/etc/timezone
+          owner=0 group=0 mode=0644
+    notify: Update timezone
+
+  - name: (Ubuntu 16.04) Set timezone 
+    file: src=/usr/share/zoneinfo/Europe/Paris dest=/etc/localtime state=link force=yes
+#    command: ln -fs /usr/share/zoneinfo/Europe/Paris /etc/localtime
+    when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+
+  - name: Add user
+    user: name={{ GENERIC_DEPLOY_USERNAME }} password={{ GENERIC_DEPLOY_PASSWORD }} shell=/bin/bash
+
+  - name: Add deploy user to sudoers
+    action: 'lineinfile
+          dest=/etc/sudoers
+          state=present
+          regexp="^{{ GENERIC_DEPLOY_USERNAME }} ALL"
+          line="{{ GENERIC_DEPLOY_USERNAME }} ALL=(ALL:ALL) ALL"'
+
+  - name : Create ssh directory
+    action: file path=/home/{{ GENERIC_DEPLOY_USERNAME }}/.ssh
+          state=directory
+          owner=0 group=0 mode=0755
+
+  - name: Copy wognet authorized keys
+    action: copy src={{ WOGNET_AUTHORIZEDKEYS }}
+            dest=/home/{{ GENERIC_DEPLOY_USERNAME }}/.ssh/authorized_keys
+            owner=0 group=0 mode=644
+
+  - name: Add curent user pubkey to authorized_keys file
+    authorized_key: user={{ GENERIC_DEPLOY_USERNAME }} key={{ item }}
+    with_file:
+        - ~/.ssh/id_rsa.pub
+
+  - name: Disallow password authentication
+    lineinfile: dest=/etc/ssh/sshd_config
+              regexp="PasswordAuthentication"
+              line="PasswordAuthentication no"
+              state=present
+    notify: Restart ssh
+
+  - name: Disallow root SSH access
+    lineinfile: dest=/etc/ssh/sshd_config
+                regexp="PermitRootLogin"
+                line="PermitRootLogin no"
+                state=present
+    notify: Restart ssh
+
+  - name: Set ufw policy - Allow ssh
+    ufw: proto=tcp port=22 rule=allow
+
+  - name: Set ufw policy - Deny all incoming
+    ufw: state=enabled direction=incoming policy=deny
+
+  handlers:
+    - name: Update timezone
+      command: dpkg-reconfigure --frontend noninteractive tzdata
+
+    - name: Restart ssh
+service: name=ssh state=restarted

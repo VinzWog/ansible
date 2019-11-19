@@ -1,0 +1,8 @@
+#####
+# Variables for CentOS hosts
+#####
+
+BASIC_PACKAGES:
+ - man
+ - vim
+ - libselinux-python

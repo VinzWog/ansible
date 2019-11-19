@@ -1,0 +1,43 @@
+### ansible-playbook playbooks/bitwarden-deploy/main.yml -i hosts --vault-password-file vault
+### ansible-playbook playbooks/bitwarden-deploy/main.yml -i hosts --extra-vars "target=ansible-test"
+---
+  - name: Deploy a Bitwarden server (using official shell script)
+    # hosts: bitwarden
+    hosts: '{{ target }}'
+
+    vars:
+      bitwarden_script_remote_path: https://go.btwrdn.co/bw-sh
+
+    tasks:
+    - name: Load vault
+      include_vars: vault-bitwarden.yml
+      no_log: true
+
+    - name: Install pip
+      include_role:
+        name: dgeerlingguy.pip
+        apply:
+          become: yes
+
+    - name: Install pexpect
+      pip:
+        name: pexpect
+        state: latest
+      become: yes
+
+    - name: Download bitwarden.sh install script
+      shell: curl -Lso bitwarden.sh "{{ bitwarden_script_remote_path }}" && chmod +x bitwarden.sh
+      no_log: true
+
+    - name: Execute the script
+      expect:
+        command: /usr/bin/sh ./bitwarden.sh
+        responses:
+          Question:
+            # Enter the domain name for your Bitwarden instance (ex. bitwarden.example.com)
+            - "{{ bitwarden_fqdn }}"
+            # Do you want to use Let's Encrypt to generate a free SSL certificate? (y/n):
+            - y
+            # Enter your email address (Let's Encrypt will send you certificate expiration reminders)
+            - "{{ bitwarden_letsencrypt_email }}"
+      become: yes

@@ -1,0 +1,9 @@
+#####
+# Handlers for common role
+#####
+
+- name: Reload SSH
+  service:
+    name: sshd
+    state: reloaded
+  become: yes

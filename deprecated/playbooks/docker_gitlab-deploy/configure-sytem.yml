@@ -1,0 +1,12 @@
+---
+  - name: Ensure a locale exists.
+    locale_gen:
+      name: "{{ locale }}"
+      state: present
+
+  - name: Allow write in /var/log
+    file:
+      path: /var/log
+      state: directory
+      mode: 0777
+    become: yes

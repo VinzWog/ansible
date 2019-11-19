@@ -1,0 +1,24 @@
+- hosts: "{{ target }}"
+
+  remote_user: root
+
+  vars:
+    WOGNET_PLEX_FILE_DIR: vars
+
+  tasks:
+  - name: Load vault
+    include_vars: vars/vault-proxmox.yml
+    no_log: true
+
+  - name: Install required packages
+    apt: name={{ item }} state=latest
+    with_items:
+        - python-pip
+	- virtualenv
+
+##  - pip:
+##    name: proxmoxer
+##
+##  - pip:
+##    name: requests
+##
