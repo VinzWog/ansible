@@ -1,0 +1,4 @@
+# AWS credentials
+[default]
+aws_access_key_id={{ VAULT_AWS_ACCESS_KEY_ID }}
+aws_secret_access_key={{ VAULT_AWS_SECRET_ACCESS_KEY }}

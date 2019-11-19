@@ -1,0 +1,36 @@
+---
+- name: Provision GCP Instance
+  gce:
+    service_account_email: "{{ GCP_SERVICE_ACCOUNT_EMAIL }}"
+    credentials_file: "{{ GCP_AUTH_FILE }}"
+    project_id: "{{ GCP_PROJECT }}"
+    instance_names: "{{ GCP_INSTANCE_NAME }}"
+    zone: "{{ GCP_ZONE }}"
+    machine_type: "{{ GCP_INSTANCE_TYPE }}"
+    image: "{{ GCP_INSTANCE_CUSTOM_IMAGE }}"
+    disk_size: "{{ GCP_INSTANCE_DISK_SIZE_GB }}"
+    state: present
+  register: gce
+
+- name: Register host(s) data
+  add_host:
+    hostname: "{{ item.public_ip }}"
+    groupname: gce-launched
+  with_items: "{{ gce.instance_data }}"
+
+- name: Wait for SSH for instances
+  wait_for:
+    delay: 1
+    host: "{{ item.public_ip }}"
+    port: 22
+    state: started
+    timeout: 60
+  with_items: "{{ gce.instance_data }}"
+
+- name: Install python
+  delegate_to: "{{ item.public_ip }}"
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  retries: 2
+  delay: 5
+  become: yes
+  with_items: "{{ gce.instance_data }}"

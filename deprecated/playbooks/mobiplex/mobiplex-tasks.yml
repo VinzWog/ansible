@@ -1,0 +1,97 @@
+### ansible-playbook playbooks/mobiplex/mobiplex-tasks.yml -i playbooks/AWS/hosts-aws_auto.ini --extra-vars "target=ec2-******.compute.amazonaws.com"
+---
+  - name: Deploy Mobiplex
+    hosts: '{{ target }}'
+    
+    vars:
+      rclone_conf_path: ~/Desktop/RClone/rclone.conf-ORI.txt
+      rclone_service_path: ~/Desktop/RClone/rclone-mount.service
+
+    tasks:    
+      - name: Update and upgrade apt packages
+        become: true
+        apt:
+          upgrade: yes
+          update_cache: yes
+          cache_valid_time: 86400 #One day
+
+      - name : Install required packages
+        apt: name={{ item }} state=latest
+        with_items:
+            - fuse
+        become: yes
+
+      - name : Create Rclone configuration directory
+        file:
+          path: /root/.config/rclone
+          state: directory
+        become: yes
+            
+      - name: Copy Rclone configuration file
+        copy:
+          src: "{{ rclone_conf_path }}"
+          dest: "/root/.config/rclone/rclone.conf"
+          mode: 0644
+          owner: root
+          group: root
+        become: yes
+        
+      - name: Copy Rclone service file
+        copy:
+          src: "{{ rclone_service_path }}"
+          dest: "/etc/systemd/system/rclone-mount.service"
+          mode: 0755
+          owner: root
+          group: root
+        become: yes
+
+      - name : Create Rclone mount directory
+        file:
+          path: /mnt/GDrive/
+          state: directory
+        become: yes
+
+      - name: Enable and start Rclone service
+        systemd:
+          daemon_reload: yes
+          name: rclone-mount.service
+          enabled: yes
+          state: started
+        become: yes
+
+#      - name: Pull Plex Media Center image
+#        docker_image:
+#          name: plexinc/pms-docker
+#        become: yes
+#          
+#      - name: Build mobiplex docker service                
+#        docker_service:
+#            project_name: mobiplex
+#            definition:
+#              version: '2'
+#              services:
+#                plex:
+#                  image: plexinc/pms-docker
+#                  restart: unless-stopped
+#                  environment:
+#                    - TZ=Europe/Paris
+#                    ### Get a PlexClaim here : https://plex.tv/claim
+#                    #- PLEX_CLAIM=claim-tmsqtEuR1F8PqWwFdByu
+#                  network_mode: host
+#                  volumes:
+#                  - ./Mobiplex:/config
+#                  - /tmp>:/transcode
+#                  - /mnt/GDrive/Hulk>:/data
+#        register: output
+#        become: yes  
+#
+#      - debug:
+#        var: output
+#        
+#      - docker_service:
+#          project_name: mobiplex
+#          state: present
+# #       become: yes      
+
+
+

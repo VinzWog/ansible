@@ -1,0 +1,44 @@
+---
+- name: Provision EC2 Instance
+  ec2:
+     key_name: "{{ EC2_KEYPAIR }}"
+     group: "{{ EC2_SECURITY_GROUP }}"
+     instance_type: "{{ EC2_INSTANCE_TYPE }}"
+     image: "{{ EC2_AMI_ID }}"
+     wait: true
+     region: "{{ AWS_REGION }}"
+     vpc_subnet_id: " {{ EC2_SUBNET_ID }}"
+     assign_public_ip: yes
+  register: ec2
+
+- name: Set instance name from public dns name
+  set_fact:
+    EC2_INSTANCE_NAME: "{{ item.public_dns_name }}"
+  with_items: "{{ ec2.instances }}"
+
+# DEBUG: Display variables content
+- debug: msg="{{ EC2_INSTANCE_NAME }}"
+
+- name: Add new instance to host group
+  add_host:
+    hostname: "{{ EC2_INSTANCE_NAME }}"
+    groupname: ec2-launched
+    ansible_ssh_private_key_file: "{{ EC2_SSH_KEY }}"
+    ansible_user: "{{ EC2_SSH_USER }}"
+    gather_facts: false
+
+- name: Wait for SSH port to listen
+  wait_for:
+    port: 22
+    host: "{{ EC2_INSTANCE_NAME }}"
+
+- name: Install python
+  delegate_to: "{{ EC2_INSTANCE_NAME }}"
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+  become: yes
+
+# Need Python installed to work
+- name: Test ansible ansible connection
+  delegate_to: "{{ EC2_INSTANCE_NAME }}"
+  wait_for_connection:
+    timeout: 60

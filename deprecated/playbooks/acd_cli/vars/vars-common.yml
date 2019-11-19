@@ -1,0 +1,8 @@
+#####
+# Variables for acd_cli role
+#####
+
+ACD_USER: vinz
+ACD_GROUP: "{{ ACD_USER }}" 
+ACD_INSTALL_PATH: /usr/local
+ACD_MOUNTPOINT: /home/{{ ACD_USER }}/AC-Drive

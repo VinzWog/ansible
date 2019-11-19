@@ -1,0 +1,14 @@
+#####
+# Tasks to deploy_basic_packages
+#####
+
+  - name: Update cache if needed (> 1h)
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Install basic packages
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items: "{{ basic_packages }}"

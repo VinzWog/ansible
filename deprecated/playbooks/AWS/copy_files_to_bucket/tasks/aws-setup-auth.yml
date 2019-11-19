@@ -1,0 +1,11 @@
+---
+- name : Create AWS directory
+  file:
+    path: ~/.aws
+    state: directory
+
+- name: Set up and copy credential template
+  template:
+    src: vars/tpl_aws_creds
+    dest: ~/.aws/credentials
+    mode: 0600

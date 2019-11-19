@@ -1,0 +1,23 @@
+## Environnement settings for default
+
+AWS_REGION: ap-southeast-2
+
+# Vars for aws-assume-role.yml tasks
+# ROLE_ARN: arn:aws:iam::.....
+# SESSION_NAME: ansible-test
+
+# Vars for aws-create-instance.yml tasks
+EC2_INSTANCE_TYPE: t2.micro
+EC2_SECURITY_GROUP: ansible-ssh
+EC2_AMI_ID: ami-e2021d81
+EC2_KEYPAIR: xmac
+EC2_SUBNET_ID: subnet-9e251df9
+
+# Vars for landing-setup.yml tasks
+LANDING_SSH_KEY: ~/.ssh/id_rsa
+LANDING_SSH_USER: ubuntu
+LANDING_SOURCE_DIR: /ndh/landing/ctlm/
+LANDING_SOURCE_LIST:
+  - austin
+  - travel-card
+  - souce3
