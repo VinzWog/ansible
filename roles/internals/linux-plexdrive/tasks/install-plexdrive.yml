@@ -1,0 +1,22 @@
+---
+- name: Download PlexDrive
+  get_url:
+    url: "{{ plexdrive_dl_url }}"
+    dest: "{{ plexdrive_bin_path }}"
+    mode: 0755
+  become: yes
+
+- name: Set up and copy service template
+  template:
+    src: tpl_plexdrive-mount_service
+    dest: "/etc/systemd/system/plexdrive.service"
+    mode: 0755
+    owner: root
+    group: root
+  become: yes
+
+- name : Create PlexDrive mount directory
+  file:
+    path: "{{ plexdrive_mount }}"
+    state: directory
+  become: yes

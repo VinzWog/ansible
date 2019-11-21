@@ -1,0 +1,7 @@
+---
+plexdrive_version: 5.0.0
+plexdrive_bin_path: /usr/sbin/plexdrive
+plexdrive_mount: /mnt/PlexDrive
+plexdrive_dl_url: https://github.com/dweidenfeld/plexdrive/releases/download/{{ plexdrive_version }}/plexdrive-linux-amd64
+rclone_config_source: ~/Documents/RClone/rclone.conf.txt
+rclone_config_path: "{{ global_config_path }}/plexdrive/plexdrive.conf"
