@@ -1,4 +1,0 @@
-# Variables vault for Bitwarden playbook
-#
-bitwarden_fqdn: vma-1.devops-capgemini.org
-bitwarden_letsencrypt_email: admin@wognet.fr
