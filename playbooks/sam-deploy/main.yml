@@ -1,0 +1,11 @@
+### ansible-playbook playbooks/sam-deploy/main.yml -i hosts --extra-vars "target=[TargetName]" -K
+
+- name: Delpoy Sam
+  hosts: "{{ target }}"
+  vars:
+    global_config_path: "~"
+    plexdrive_mount: /volume1/Plexdrive
+  tasks:
+    - name: Deploy plexdrive
+      include_role:
+        name: linux-plexdrive
