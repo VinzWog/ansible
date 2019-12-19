@@ -2,6 +2,7 @@
 
 - name: Delpoy Sam
   hosts: "{{ target }}"
+<<<<<<< HEAD
   # vars:
   tasks:
   - name: Load vault
@@ -23,3 +24,12 @@
   #   vars:
   #     # PLEXDRIVE_CONF_PATH: ~/plexdrive
   #     # PLEXDRIVE_CONF_PATH: /mnt/PlexDrive
+=======
+  vars:
+    global_config_path: "~"
+    plexdrive_mount: /volume1/Plexdrive
+  tasks:
+    - name: Deploy plexdrive
+      include_role:
+        name: linux-plexdrive
+>>>>>>> 9c115938bb3652e785a8449fc157712962def99d

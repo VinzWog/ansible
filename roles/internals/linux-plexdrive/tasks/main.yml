@@ -1,6 +1,7 @@
 #####
 # Main task file for Linux to install plexdrive
 #####
+<<<<<<< HEAD
 - name: Include generic variables
   include_vars: vars.yml
 
@@ -34,3 +35,22 @@
 - name: Configure auto launch on Synology DSM
   include_tasks: auto_start-syno.yml
   when: ansible_proc_cmdline.syno_hw_version is defined
+=======
+
+- name: Include generic variables
+  include_vars: vars.yml
+
+- name: Install plexdrive
+  include_tasks: install-plexdrive.yml
+
+- name: configure plexdrive
+  include_tasks: setup-plexdrive.yml
+
+- name: Enable and start PlexDrive service
+  systemd:
+    daemon_reload: yes
+    name: "plexdrive.service"
+    enabled: yes
+    state: started
+  become: yes
+>>>>>>> 9c115938bb3652e785a8449fc157712962def99d

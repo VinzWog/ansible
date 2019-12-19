@@ -1,6 +1,15 @@
 ---
+<<<<<<< HEAD
 PLEXDRIVE_VERSION: 5.0.0
 PLEXDRIVE_BIN_PATH: /usr/sbin/plexdrive plexdrive_mount: /mnt/PlexDrive
 PLEXDRIVE_DL_URL: https://github.com/dweidenfeld/plexdrive/releases/download/{{ plexdrive_version }}/plexdrive-linux-amd64
 PLEXDRIVE_CONF_SOURCE: ~/Documents/Plexdrive/plexdrive-conf.tar.gz
 PLEXDRIVE_CONF_PATH: ~/
+=======
+plexdrive_version: 5.0.0
+plexdrive_bin_path: /usr/sbin/plexdrive
+plexdrive_mount: /mnt/PlexDrive
+plexdrive_dl_url: https://github.com/dweidenfeld/plexdrive/releases/download/{{ plexdrive_version }}/plexdrive-linux-amd64
+rclone_config_source: ~/Documents/RClone/rclone.conf.txt
+rclone_config_path: "{{ global_config_path }}/plexdrive/plexdrive.conf"
+>>>>>>> 9c115938bb3652e785a8449fc157712962def99d
