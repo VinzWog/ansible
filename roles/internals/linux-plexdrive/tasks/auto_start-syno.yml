@@ -1,0 +1,9 @@
+---
+- name: Set up and copy service template
+  template:
+    src: tpl_plexdrive-mount_service-syno
+    dest: /etc/init/plexdrive.conf
+    mode: 0755
+    owner: root
+    group: root
+  become: yes

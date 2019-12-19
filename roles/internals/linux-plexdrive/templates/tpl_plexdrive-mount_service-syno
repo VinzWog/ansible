@@ -1,0 +1,13 @@
+###
+start on syno.share.ready and syno.network.ready and syno.volume.ready
+
+stop on runlevel [06]
+
+script
+  cd "{{ PLEXDRIVE_CONF_PATH }}"
+  {{ PLEXDRIVE_BIN_PATH }} mount -c {{ PLEXDRIVE_CONF_PATH }}plexdrive-conf/ -o allow_other -v 2 {{ PLEXDRIVE_MOUNT }}
+end script
+
+post-stop script
+	/bin/fusermount -uz {{ PLEXDRIVE_MOUNT }}
+end script

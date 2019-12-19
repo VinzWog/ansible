@@ -1,7 +1,5 @@
-### ansible-playbook playbooks/linux-setup/main.yml -i hosts --extra-vars "target=[TargetName]" -K
-
+###
 - name: Global Linux OS configuration
-  hosts: "{{ target }}"
   vars:
     os_auth_pw_max_age: 99999
     os_auth_timeout: 120
@@ -14,9 +12,6 @@
     - name: Apply generic system configuration
       include_role:
         name: linux-system-base
-    # - name: Apply generic security configuration
-    #   include_role:
-    #     name: linux-security-base
     - name: Apply OS hardening role
       include_role:
         name: dev-sec.os-hardening

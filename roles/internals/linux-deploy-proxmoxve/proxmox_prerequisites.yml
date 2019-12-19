@@ -1,0 +1,102 @@
+---
+  vars_prompt:
+    - name: yourdomain
+      prompt: "Enter the domain name to append to the hostname"
+      default: domain.tld
+      private: no
+    - name: adminusername
+      prompt: "Enter the admin username"
+      private: no
+    - name: adminpassword
+      prompt: "Enter the adminpassword"
+    # - name: rebootyesno
+    #   prompt: "Server should be rebooted after first install. Is it OK ? (yes/no)"
+    #   default: no
+    #   private: no
+    # - name: vmprefix
+    #   prompt: "Enter a prefix for the VM names"
+    #   default: "proxmox"
+    #   private: no
+    # - name: provider
+    #   prompt: "Do you use provided scaleway script to generate Proxmox servers ?"
+    #   default: no
+    #   private: no
+  tasks:
+  #- debug: var=ansible_facts
+  # - name: "Modify /etc/hosts files to proxmox standards when working on Scaleway VMs"
+  #   template:
+  #     src: hosts.scaleway.j2
+  #     dest: /etc/hosts
+  #   when: provider | bool
+  # - name: "Modify etc/hosts files to proxmox standards when working with generic Debian"
+  #   template:
+  #     src: hosts.generic.j2
+  #     dest: /etc/hosts
+  #   when: not (provider | bool)
+    - name: "Install Aptitude (recommended when using apt ansible module) and update repositories cache"
+      apt:
+        name: aptitude
+        state: present
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: "Apt upgrade"
+      apt:
+        upgrade: yes
+    - name: "Add proxmoxve archive repository keys"
+      apt_key:
+        url: "http://download.proxmox.com/debian/proxmox-ve-release-{{item}}.x.gpg"
+        state: present
+      loop:
+        - 5
+        - 6
+    - name: "Add proxmoxve archive repository and update cache"
+      apt_repository:
+        repo: "deb http://download.proxmox.com/debian/pve {{ansible_distribution_release}} pve-no-subscription"
+        state: present
+        update_cache: yes
+    - name: "Apt upgrade"
+      apt:
+        upgrade: dist
+    - name: "Install packages"
+      apt:
+        name: "{{item}}"
+        state: present
+      loop:
+        - proxmox-ve
+        - postfix
+        - open-iscsi
+    - name: "Remove packages"
+      apt:
+        name: "{{item}}"
+        state: present
+      loop:
+        - os-prober
+    - name: "Remove pve-entreprise repo if necessary"
+      file:
+        path: /etc/apt/sources.list.d/pve-enterprise.list
+        state: absent
+    # - name: "Reboot node after first install"
+    #   shell: "/sbin/shutdown -r -t 1 > /tmp/first_install_ok"
+    #   args:
+    #     creates: /tmp/first_install_ok
+    #   when: rebootyesno == "yes"
+    - name: "Create admin group"
+      shell: "pveum groupadd admin -comment 'System Administrators' > /tmp/admingroup"
+      args:
+        creates: /tmp/admingroup
+    - name: "Add group ACL"
+      shell: "pveum aclmod / -group admin -role Administrator > /tmp/groupacl"
+      args:
+        creates: /tmp/groupacl
+    - name: "Add admin user"
+      shell: "pveum user add {{adminusername}}@pve > /tmp/adminuser"
+      args:
+        creates: /tmp/adminuser
+    - name: "Add admin to admin group"
+      shell: "pveum usermod {{adminusername}}@pve -group admin > /tmp/adminusertogroup"
+      args:
+        creates: /tmp/adminusertogroup
+    - name: "Add admin password"
+      shell: "echo -e '{{adminpassword}}\n{{adminpassword}}\n' | pveum passwd {{adminusername}}@pve > /tmp/adminpwd"
+      args:
+        creates: /tmp/adminpwd

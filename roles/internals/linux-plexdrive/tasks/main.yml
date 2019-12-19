@@ -1,20 +1,36 @@
 #####
 # Main task file for Linux to install plexdrive
 #####
-
 - name: Include generic variables
   include_vars: vars.yml
 
-- name: Install plexdrive
-  include_tasks: install-plexdrive.yml
-
-- name: configure plexdrive
-  include_tasks: setup-plexdrive.yml
-
-- name: Enable and start PlexDrive service
-  systemd:
-    daemon_reload: yes
-    name: "plexdrive.service"
-    enabled: yes
-    state: started
+- name: Download PlexDrive
+  get_url:
+    url: "{{ PLEXDRIVE_DL_URL }}"
+    dest: "{{ PLEXDRIVE_BIN_PATH }}"
+    mode: 0755
   become: yes
+
+# - name: Create Plexdrive configuration directory
+#   file:
+#     path: "{{ plexdrive_conf_path }}"
+#     state: directory
+
+- name: Copy and extract plexdrive configuration
+  unarchive:
+    src: "{{ PLEXDRIVE_CONF_SOURCE }}"
+    dest: "{{ PLEXDRIVE_CONF_PATH }}"
+
+- name: Create PlexDrive mount directory
+  file:
+    path: "{{ PLEXDRIVE_MOUNT }}"
+    state: directory
+  become: yes
+
+- name: Configure auto launch on Debian
+  include_tasks: auto_start-debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Configure auto launch on Synology DSM
+  include_tasks: auto_start-syno.yml
+  when: ansible_proc_cmdline.syno_hw_version is defined

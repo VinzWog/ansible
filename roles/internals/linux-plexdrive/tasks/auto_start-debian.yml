@@ -1,0 +1,17 @@
+---
+- name: Set up and copy service template
+  template:
+    src: tpl_plexdrive-mount_service-debian
+    dest: "/etc/systemd/system/plexdrive.service"
+    mode: 0755
+    owner: root
+    group: root
+  become: yes
+
+- name: Enable and start PlexDrive service
+  systemd:
+    daemon_reload: yes
+    name: "plexdrive.service"
+    enabled: yes
+    state: started
+  become: yes

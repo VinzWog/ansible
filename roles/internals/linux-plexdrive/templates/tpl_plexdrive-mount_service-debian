@@ -1,0 +1,16 @@
+#### systemd script (/etc/systemd/system/plexdrive.service):
+[Unit]
+Description=Plexdrive
+AssertPathIsDirectory={{ PLEXDRIVE_MOUNT }}
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart={{ PLEXDRIVE_BIN_PATH }} mount -c {{ PLEXDRIVE_CONF_PATH }}plexdrive-conf/ -o allow_other -v 2 {{ PLEXDRIVE_MOUNT }}
+ExecStop=/bin/fusermount -uz {{ PLEXDRIVE_MOUNT }}
+Restart=on-abort
+
+[Install]
+WantedBy=network-online.target

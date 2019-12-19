@@ -2,10 +2,24 @@
 
 - name: Delpoy Sam
   hosts: "{{ target }}"
-  vars:
-    global_config_path: "~"
-    plexdrive_mount: /volume1/Plexdrive
+  # vars:
   tasks:
-    - name: Deploy plexdrive
-      include_role:
-        name: linux-plexdrive
+  - name: Load vault
+    include_vars: vault-seedbox.yml
+    no_log: true
+
+  - name: Configure Linux Host
+    include_role:
+      name: linux-setup
+
+## SOURCE: https://github.com/zwindler/ansible-proxmoxve
+  - name: Install Proxmox VE
+    include_role:
+      name: linux-deploy-proxmoxve
+
+  # - name: Deploy plexdrive
+  #   include_role:
+  #     name: linux-plexdrive
+  #   vars:
+  #     # PLEXDRIVE_CONF_PATH: ~/plexdrive
+  #     # PLEXDRIVE_CONF_PATH: /mnt/PlexDrive
