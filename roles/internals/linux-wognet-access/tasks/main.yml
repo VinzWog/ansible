@@ -1,0 +1,37 @@
+#####
+# Tasks to configure user access for Linux
+#####
+
+- name: Create user group
+  group:
+    name: "{{ GROUPNAME }}"
+    state: present
+  become: yes
+
+- name: Create user
+  user:
+    name: "{{ USERNAME }}"
+    group: "{{ GROUPNAME }}"
+    password: "{{ PASSWORD }}"
+    create_home: yes
+    home: "/home/{{USERNAME}}"
+    shell: /bin/bash
+  become: yes
+
+- name: Add user in sudoers file
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^{{USERNAME}} ALL"
+    line: "{{USERNAME}} ALL=(ALL) ALL"
+  become: yes
+
+- name: Set ansible authorized public key
+  authorized_key:
+    user: "{{ USERNAME }}"
+    key: '{{ item }}'
+    state: present
+    exclusive: True
+  with_file:
+    - vars/wognet.keys
+  become: yes
