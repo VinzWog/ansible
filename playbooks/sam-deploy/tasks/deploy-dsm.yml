@@ -1,0 +1,53 @@
+---
+# - name: Restore DSM VM backup
+#   shell: "qmrestore --storage {{DSM_STORAGE_VOL}} {{DSM_VM_BACKUP_PATH}} {{DSM_VM_ID}}"
+#   ignore_errors: True
+#
+# - name: Setup DSM VM name
+#   lineinfile:
+#     dest: "/etc/pve/nodes/{{DSM_VM_NODE}}/qemu-server/{{DSM_VM_ID}}.conf"
+#     regexp: '^(.*)bridge='
+#     line: '\1bridge={{VM_IFACE}}'
+#     backrefs: yes
+#     state: present
+#     backup: yes
+#
+# - name: Setup DSM VM network interface
+#   lineinfile:
+#     dest: "/etc/pve/nodes/{{DSM_VM_NODE}}/qemu-server/{{DSM_VM_ID}}.conf"
+#     regexp: '^name:'
+#     line: "name: {{DSM_VM_NAME}}"
+#     state: present
+#     # backup: yes
+
+# - name: Setup DSM VM vcpu number
+#   lineinfile:
+#     dest: "/etc/pve/nodes/{{DSM_VM_NODE}}/qemu-server/{{DSM_VM_ID}}.conf"
+#     regexp: '^cores:'
+#     line: "cores: {{DSM_VCPU_COUNT}}"
+#     state: present
+#     # backup: yes
+
+# - name: Create DSM vg
+#   lvg:
+#     vg: "{{DSM_STORAGE_VG}}"
+#     pvs: "{{DSM_STORAGE_PV}}"
+#
+# - name: Create DSM lvm storage
+#   shell: "pvesm add lvm {{DSM_STORAGE_NAME}} --vgname {{DSM_STORAGE_VG}}"
+#
+# - name: Create and attach lvm raw disk to DSM VM
+#   shell: "qm set {{DSM_VM_ID}} -sata2 {{DSM_STORAGE_NAME}}:{{DSM_DISK_SIZE_GB}}"
+
+# - name: Setup DNAT rules for VM ports in iptables
+#   blockinfile:
+#     path: "{{DEPLOY_PATH}}/scripts/pve-networking-up.sh"
+#     block: |
+#       iptables -t nat -A PREROUTING -i {{PUBLIC_IFACE}} -p {{item.port_type}} --dport {{item.ext_port}} -j DNAT --to {{item.vm_ip}}:{{item.vm_port}}
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK - Service {{item.comment}} on port {{item.ext_port}}"
+#     backup: yes
+#   with_items:
+#     - { ext_port: 15000, port_type: tcp, vm_ip: 192.168.9.1, vm_port: 5000, comment: DSM WebUI }
+#     - { ext_port: 2200, port_type: tcp, vm_ip: 192.168.9.1, vm_port: 2200, comment: Syncthing }
+#     - { ext_port: 8384, port_type: tcp, vm_ip: 192.168.9.1, vm_port: 8384, comment: Syncthing }
+#     - { ext_port: 32400, port_type: tcp, vm_ip: 192.168.9.1, vm_port: 32400, comment: Plex }

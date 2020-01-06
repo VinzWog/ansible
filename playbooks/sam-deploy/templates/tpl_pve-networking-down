@@ -1,0 +1,3 @@
+#!/bin/sh
+
+iptables -t nat -D POSTROUTING -s {{VM_INT_NET}} -o {{PUBLIC_IFACE}} -j MASQUERADE

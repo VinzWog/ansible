@@ -1,0 +1,31 @@
+---
+- name: Create VM bridge interface
+  blockinfile:
+    path: /etc/network/interfaces
+    block: |
+      auto {{VM_IFACE}}
+      iface {{VM_IFACE}} inet static
+            address  192.168.9.254
+            netmask  255.255.255.0
+            bridge-ports none
+            bridge-stp off
+            bridge-fd 0
+
+            post-up "{{DEPLOY_PATH}}/scripts/pve-networking-up.sh"
+            post-down "{{DEPLOY_PATH}}/scripts/pve-networking-down.sh"
+
+- name: Copy pve-networking-up script
+  template:
+    src: tpl_pve-networking-up
+    dest: "{{DEPLOY_PATH}}/scripts/pve-networking-up.sh"
+    owner: "{{USERNAME}}"
+    group: "{{GROUPNAME}}"
+    mode: 0755
+
+- name: Copy pve-networking-down script
+  template:
+    src: tpl_pve-networking-down
+    dest: "{{DEPLOY_PATH}}/scripts/pve-networking-down.sh"
+    owner: "{{USERNAME}}"
+    group: "{{GROUPNAME}}"
+    mode: 0755

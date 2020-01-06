@@ -1,0 +1,11 @@
+- name: Install pip
+  include_role:
+    name: dgeerlingguy.pip
+    apply:
+      become: yes
+
+- name: Install proxmoxer
+  pip:
+    name: proxmoxer
+    state: latest
+  become: yes

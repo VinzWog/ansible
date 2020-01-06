@@ -1,0 +1,29 @@
+---
+# - name: "Create admin group"
+#   shell: "pveum groupadd admin -comment 'PVE Administrators' > /tmp/admingroup"
+#   args:
+#     creates: /tmp/admingroup
+#   # ignore_errors: True
+#
+# - name: "Add group ACL"
+#   shell: "pveum aclmod / -group admin -role Administrator > /tmp/groupacl"
+#   args:
+#     creates: /tmp/groupacl
+#   # ignore_errors: True
+#
+# - name: "Add admin user"
+#   shell: "pveum user add {{PVE_ADMIN_USERNAME}}@{{PVE_REALM}} > /tmp/adminuser"
+#   args:
+#     creates: /tmp/adminuser
+#   # ignore_errors: True
+#
+# - name: "Add admin to admin group"
+#   shell: "pveum usermod {{PVE_ADMIN_USERNAME}}@{{PVE_REALM}} -group admin > /tmp/adminusertogroup"
+#   args:
+#     creates: /tmp/adminusertogroup
+#   # ignore_errors: True
+#
+# - name: "Add admin password"
+#   shell: "echo -e '{{PVE_ADMIN_PASSWORD}}\n{{PVE_ADMIN_PASSWORD}}\n' | pveum passwd {{PVE_ADMIN_USERNAME}}@{{PVE_REALM}} > /tmp/adminpwd"
+#   args:
+#     creates: /tmp/adminpwd

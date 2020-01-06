@@ -1,0 +1,24 @@
+---
+- name: Install Fail2Ban
+  package:
+    name: fail2ban
+    state: latest
+  become: yes
+
+- name: Copy proxmox-webui.conf
+  copy:
+    src: proxmox-webui.conf
+    dest: /etc/fail2ban/filter.d/proxmox-webui.conf
+  become: yes
+
+- name: Copy proxmox-webui.local
+  copy:
+    src: proxmox-webui.local
+    dest: /etc/fail2ban/jail.d/proxmox-webui.local
+  become: yes
+
+- name: Restart service fail2ban
+  service:
+    name: fail2ban
+    state: restarted
+  become: yes

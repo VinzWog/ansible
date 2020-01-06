@@ -1,0 +1,14 @@
+DRIVE1 /dev/sdc
+
+BOOTLOADER grub
+
+HOSTNAME sam
+
+PART  /boot  ext3  512M
+PART  lvm    vg_pve    all
+
+LV  vg_pve  lv_root  /     ext4  20G
+LV  vg_pve  lv_swap  swap  swap  32G
+LV  vg_pve  lv_tmp  /tmp     ext4  10G
+LV  vg_pve  lv_data  /var/lib/vz     ext4  100G
+LV  vg_pve  lv_dump  /var/lib/vz/dump     ext4  40G

@@ -1,0 +1,46 @@
+---
+  - name: Ensure a locale exists.
+    locale_gen:
+      name: "{{LOCALE}}"
+      state: present
+
+  - name: Allow write in /var/log
+    file:
+      path: /var/log
+      state: directory
+      mode: 0777
+
+  - name: Change ssh port
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "^#Port 22|^Port {{SSH_PORT}}"
+      line: "Port {{SSH_PORT}}"
+      state: present
+
+  - name: Disable ssh password auth
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "^#PasswordAuthentication yes|^PasswordAuthentication no"
+      line: "PasswordAuthentication no"
+      state: present
+
+  - name: Check if DEPLOY_PATH exists
+    stat: path={{DEPLOY_PATH}}
+    register: gc
+
+  - name: Create config directory
+    file:
+      path: "{{DEPLOY_PATH}}"
+      state: directory
+      owner: "{{USERNAME}}"
+      group: "{{GROUPNAME}}"
+      mode: 0755
+    when: gc.stat.isdir is not defined
+
+  - name: Create script directory
+    file:
+      path: "{{DEPLOY_PATH}}/scripts"
+      state: directory
+      owner: "{{USERNAME}}"
+      group: "{{GROUPNAME}}"
+      mode: 0755
