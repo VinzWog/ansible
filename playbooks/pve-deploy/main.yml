@@ -1,6 +1,6 @@
-### ansible-playbook playbooks/sam-deploy/main.yml -i hosts --extra-vars "target=[TargetName] -u root
+### ansible-playbook playbooks/pve-deploy/main.yml -i hosts --extra-vars "target=[TargetName] -u root
 
-- name: Delpoy Sam
+- name: Delpoy PVE hypervisor
   hosts: "{{ target }}"
 
   vars:
@@ -38,7 +38,7 @@
   tasks:
   - name: Load vault
     # include_vars: vault-example.yml
-    include_vars: ~/Documents/Ansible/vaults/vault-sam-deploy.yml
+    include_vars: ~/Documents/Ansible/vaults/vault-pve-deploy.yml
     no_log: true
 
   # - name: Setup Wognet access
