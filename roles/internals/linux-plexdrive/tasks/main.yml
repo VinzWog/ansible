@@ -4,28 +4,31 @@
 - name: Include generic variables
   include_vars: vars.yml
 
+- name: Create Plexdrive configuration directory
+  file:
+    path: "{{ PLEXDRIVE_INSTALL_PATH }}"
+    state: directory
+
+- name: Create Plexdrive bin directory
+  file:
+    path: "{{ PLEXDRIVE_BIN_PATH }}"
+    state: directory
+
 - name: Download PlexDrive
   get_url:
     url: "{{ PLEXDRIVE_DL_URL }}"
-    dest: "{{ PLEXDRIVE_BIN_PATH }}"
+    dest: "{{ PLEXDRIVE_BIN_PATH }}/plexdrive"
     mode: 0755
-  become: yes
-
-# - name: Create Plexdrive configuration directory
-#   file:
-#     path: "{{ plexdrive_conf_path }}"
-#     state: directory
 
 - name: Copy and extract plexdrive configuration
   unarchive:
     src: "{{ PLEXDRIVE_CONF_SOURCE }}"
-    dest: "{{ PLEXDRIVE_CONF_PATH }}"
+    dest: "{{ PLEXDRIVE_INSTALL_PATH }}"
 
 - name: Create PlexDrive mount directory
   file:
-    path: "{{ PLEXDRIVE_MOUNT }}"
+    path: "{{ PLEXDRIVE_MOUNT_POINT }}"
     state: directory
-  become: yes
 
 - name: Configure auto launch on Debian
   include_tasks: auto_start-debian.yml

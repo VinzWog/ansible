@@ -2,8 +2,11 @@
 - name: Set up and copy service template
   template:
     src: tpl_plexdrive-mount_service-syno
-    dest: /etc/init/plexdrive.conf
+    dest: "{{PLEXDRIVE_INSTALL_PATH}}/plexdrive_service.sh"
     mode: 0755
-    owner: root
-    group: root
-  become: yes
+
+#### Add schedule tasks creation
+
+# Plexdrive mount - root - Boot-up - /root/plexdrive/plexdrive_service.sh -m
+#
+# Plexdrive mount - root - Shutdown - /root/plexdrive/plexdrive_service.sh -e

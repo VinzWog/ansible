@@ -1,13 +1,69 @@
-###
-start on syno.share.ready and syno.network.ready and syno.volume.ready
+#!/bin/sh
 
-stop on runlevel [06]
+SCRIPT_NAME= `basename -- "$0"`
 
-script
-  cd "{{ PLEXDRIVE_CONF_PATH }}"
-  {{ PLEXDRIVE_BIN_PATH }} mount -c {{ PLEXDRIVE_CONF_PATH }}plexdrive-conf/ -o allow_other -v 2 {{ PLEXDRIVE_MOUNT }}
-end script
+[ ! -d "{{PLEXDRIVE_INSTALL_PATH}}/log" ] && mkdir "{{PLEXDRIVE_INSTALL_PATH}}/log"
 
-post-stop script
-	/bin/fusermount -uz {{ PLEXDRIVE_MOUNT }}
-end script
+mount_plexdrive () {
+# rm -rf /volume1/Plexdrive/\@eaDir && /root/plexdrive/bin/plexdrive mount -c /root/plexdrive/conf/ -o allow_other,read_only -v 2 /volume1/Plexdrive
+    cd {{PLEXDRIVE_MOUNT_POINT}} && rm -rf "@eaDir"
+
+    nohup {{PLEXDRIVE_BIN_PATH}}/plexdrive mount -c {{PLEXDRIVE_INSTALL_PATH}}/conf/ \
+    -o allow_other,read_only -v 2 {{PLEXDRIVE_MOUNT_POINT}} \
+    > {{PLEXDRIVE_INSTALL_PATH}}/log/$SCRIPT_NAME.log 2>&1 < /dev/null &
+}
+
+eject_plexdrive () {
+
+    if mount | grep "on {{PLEXDRIVE_MOUNT_POINT}} type" > /dev/null
+    then
+         fusermount -uz "{{PLEXDRIVE_MOUNT_POINT}}"
+         sleep 1
+    fi
+
+    # echo "killing all plexdrive processes"
+    # while ps ax | grep -v grep | grep {{PLEXDRIVE_BIN_PATH}}/plexdrive > /dev/null
+    # do
+    #       killall -9 plexdrive
+    #       sleep 1
+    # done
+}
+
+print_usage () {
+	echo "
+Usage : $1 -h|-m|-e
+
+  -h	  print this message
+	-m	  mount plexdrive => {{PLEXDRIVE_MOUNT_POINT}}
+	-e	  eject plexdrive => {{PLEXDRIVE_MOUNT_POINT}}
+	"
+}
+
+if [ $# -lt  1 ]
+	then echo "
+	Error : Missing argument"
+	print_usage
+	exit 1
+fi
+
+while getopts hme args; do
+	case $args in
+		m)
+		mount_plexdrive
+    exit
+		;;
+		e)
+		eject_plexdrive
+		exit
+    ;;
+		h)
+		print_usage
+		exit
+		;;
+		*)
+		echo "Error : Bad argument"
+		print_usage
+		exit 1
+		;;
+	esac
+done
