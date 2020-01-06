@@ -7,3 +7,4 @@
 roles/externals/*
 oauth*
 *.db
+deprecated/
