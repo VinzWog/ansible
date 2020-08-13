@@ -3,9 +3,9 @@
   blockinfile:
     path: /etc/network/interfaces
     block: |
-      auto {{VM_IFACE}}
-      iface {{VM_IFACE}} inet static
-            address  192.168.9.254
+      auto {{VM_IFACE_NAME}}
+      iface {{VM_IFACE_NAME}} inet static
+            address  {{VM_IFACE_IP}}
             netmask  255.255.255.0
             bridge-ports none
             bridge-stp off

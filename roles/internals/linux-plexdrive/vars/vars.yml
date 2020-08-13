@@ -4,4 +4,4 @@ PLEXDRIVE_DL_URL: "https://github.com/dweidenfeld/plexdrive/releases/download/{{
 PLEXDRIVE_CONF_SOURCE: ~/Documents/Plexdrive/plexdrive-conf.tar.gz
 PLEXDRIVE_INSTALL_PATH: /root/plexdrive
 PLEXDRIVE_BIN_PATH: "{{PLEXDRIVE_INSTALL_PATH}}/bin"
-PLEXDRIVE_MOUNT_POINT: /mnt/PlexDrive
+PLEXDRIVE_MOUNT_POINT: /mnt/Plexdrive

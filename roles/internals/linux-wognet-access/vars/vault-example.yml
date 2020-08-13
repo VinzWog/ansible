@@ -1,0 +1,8 @@
+### linux-wognet-access - Vault's variables example list
+---
+USERNAME: bob
+GROUPNAME: bob
+
+# Created with :
+# python -c 'import crypt; print crypt.crypt("[YOUR_PASSWORD]", "[YOUR_SALT]")'
+PASSWORD: output_of_python_cmd

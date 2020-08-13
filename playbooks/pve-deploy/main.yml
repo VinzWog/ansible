@@ -22,8 +22,11 @@
     # TIMEZONE: Europe/Paris
     DEPLOY_PATH: "/home/{{USERNAME}}"
     ### configure-network
-    PUBLIC_IFACE: enp2s0
-    VM_IFACE: vmbr0
+    # PUBLIC_IFACE: enp2s0
+    # VM_IFACE_NAME: vmbr0
+    PUBLIC_IFACE: vmbr0
+    VM_IFACE_NAME: vmbr1
+    VM_IFACE_IP: 192.168.9.1
     VM_INT_NET: 192.168.9.0/24
     ### deploy-dsm
     DSM_VM_ID: 101
@@ -38,42 +41,47 @@
   tasks:
   - name: Load vault
     # include_vars: vault-example.yml
-    include_vars: ~/Documents/Ansible/vaults/vault-pve-deploy.yml
+    include_vars: ~/Documents/Ansible/vaults/vault-pve-deploy-kusanagi.yml
     no_log: true
 
-  # - name: Setup Wognet access
-  #   include_role:
-  #     name: linux-wognet-access
-  #
-  # - name: Apply generic system configuration
-  #   include_role:
-  #     name: linux-system-base
+  - name: Ensure the Entreprise repo is removed
+    file:
+      path: /etc/apt/sources.list.d/pve-enterprise.list
+      state: absent
 
-  # - name: Configure fail2ban
-  #   include_tasks: tasks/configure-fail2ban.yml
+  - name: Apply generic system configuration
+    include_role:
+      name: linux-system-base
 
-  # - name: Apply OS hardening role
-  #   include_role:
-  #     name: dev-sec.os-hardening
-  #
-  # - name: Configure system
-  #   include_tasks: tasks/configure-system.yml
-  #
-  # - name: Configure network
-  #   include_tasks: tasks/configure-network.yml
-  #
-  # - name: Configure Proxmox VE
-  #   include_tasks: tasks/configure-pve.yml
+  - name: Setup Wognet access
+    include_role:
+      name: linux-wognet-access
+
+  - name: Configure fail2ban
+    include_tasks: tasks/configure-fail2ban.yml
+
+  - name: Apply OS hardening role
+    include_role:
+      name: dev-sec.os-hardening
+
+  - name: Configure system
+    include_tasks: tasks/configure-system.yml
+
+  - name: Configure network
+    include_tasks: tasks/configure-network.yml
+
+  - name: Configure Proxmox VE
+    include_tasks: tasks/configure-pve.yml
 
   # # SOURCE: https://github.com/zwindler/ansible-proxmoxve
-  # - name: Configure PVE user
-  #   include_tasks: tasks/configure-pve-user.yml
+  - name: Configure PVE user
+    include_tasks: tasks/configure-pve-user.yml
 
-  # - name: Configure proxmoxer api access
-  #   include_tasks: tasks/configure-promoxer.yml
+  - name: Configure proxmoxer api access
+    include_tasks: tasks/configure-promoxer.yml
 
-  - name: Deploy DSM VM
-    include_tasks: tasks/deploy-dsm.yml
+  # - name: Deploy DSM VM
+  #   include_tasks: tasks/deploy-dsm.yml
 
   # - name: Reboot Sam
   #   shell: sleep 2 && shutdown -r now "Ansible post-install reboot"

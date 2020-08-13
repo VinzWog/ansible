@@ -8,32 +8,32 @@
     state: present
     backup: yes
 
-- name: Verify ACME account
-  command: pvenode acme account list
-  register: acme_account_list
-
-- name: Install pexpect for expect module
-  pip:
-    name: pexpect
-    state: latest
-
-- name: Register ACME account
-  # shell: "echo -e 'y\n' | pvenode acme account register default {{PVE_ACME_EMAIL}} --directory https://acme-v02.api.letsencrypt.org/directory"
-  expect:
-    command: "pvenode acme account register default {{PVE_ACME_EMAIL}} --directory https://acme-v02.api.letsencrypt.org/directory"
-    responses:
-      "Do you agree to the above terms": y
-  when: acme_account_list.stdout is not search('default')
-
-- name: Define ACME domain
-  shell: "pvenode config set --acme domains={{PVE_FQDN}}"
-  when: acme_account_list.stdout is not search('default')
-
-- name: Register ACME domain
-  shell: "pvenode acme cert order"
-  when: acme_account_list.stdout is not search('default')
-
-- name: Restart service pveproxy
-  systemd:
-    name: pveproxy
-    state: restarted
+# - name: Verify ACME account
+#   command: pvenode acme account list
+#   register: acme_account_list
+#
+# - name: Install pexpect for expect module
+#   pip:
+#     name: pexpect
+#     state: latest
+#
+# - name: Register ACME account
+#   # shell: "echo -e 'y\n' | pvenode acme account register default {{PVE_ACME_EMAIL}} --directory https://acme-v02.api.letsencrypt.org/directory"
+#   expect:
+#     command: "pvenode acme account register default {{PVE_ACME_EMAIL}} --directory https://acme-v02.api.letsencrypt.org/directory"
+#     responses:
+#       "Do you agree to the above terms": y
+#   when: acme_account_list.stdout is not search('default')
+#
+# - name: Define ACME domain
+#   shell: "pvenode config set --acme domains={{PVE_FQDN}}"
+#   when: acme_account_list.stdout is not search('default')
+#
+# - name: Register ACME domain
+#   shell: "pvenode acme cert order"
+#   when: acme_account_list.stdout is not search('default')
+#
+# - name: Restart service pveproxy
+#   systemd:
+#     name: pveproxy
+#     state: restarted

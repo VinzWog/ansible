@@ -1,0 +1,27 @@
+### ansible-playbook playbooks/prometheus-deploy/main.yml -i hosts --extra-vars "target=[TargetName] -k
+
+- name: Delpoy prometheus server
+  hosts: "{{ target }}"
+
+  vars:
+    ### linux-system-base
+    # basic_packages:
+    #   - sudo
+    #   - man
+    #   - vim
+
+  tasks:
+  # - name: Load vault
+  #   # include_vars: vault-example.yml
+  #   include_vars: ~/Documents/Ansible/vaults/vault-prometheus-deploy.yml
+  #   no_log: true
+
+  - name: Deploy Plexdrive
+    include_role:
+      name: linux-plexdrive
+    vars:
+      ansible_become: yes
+      # PLEXDRIVE_CONF_SOURCE: ~/Documents/Plexdrive/plexdrive-conf.tar.gz
+      # PLEXDRIVE_INSTALL_PATH: /root/plexdrive
+      # PLEXDRIVE_BIN_PATH: "{{PLEXDRIVE_INSTALL_PATH}}/bin"
+      PLEXDRIVE_MOUNT_POINT: /volume1/Plexdrive

@@ -7,7 +7,7 @@
 #   lineinfile:
 #     dest: "/etc/pve/nodes/{{DSM_VM_NODE}}/qemu-server/{{DSM_VM_ID}}.conf"
 #     regexp: '^(.*)bridge='
-#     line: '\1bridge={{VM_IFACE}}'
+#     line: '\1bridge={{VM_IFACE_NAME}}'
 #     backrefs: yes
 #     state: present
 #     backup: yes

@@ -1,22 +1,22 @@
----       
+---
   - name: Ensure a locale exists.
     locale_gen:
       name: "{{ locale }}"
       state: present
-      
-  - name: Allow write in /var/log 
+
+  - name: Allow write in /var/log
     file:
       path: /var/log
       state: directory
       mode: 0777
-    become: yes      
+    become: yes
 
   - name: Create config directory
     file:
       path: "{{ global_config_path }}"
       state: directory
       mode: 0755
-     
+
   - name: Create script directory
     file:
       path: "{{ global_install_path }}/scripts"
