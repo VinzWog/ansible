@@ -3,26 +3,34 @@
 - name: Delpoy monitoring server
   hosts: "{{ target }}"
 
-  vars:
-    ### linux-system-base
-    # basic_packages:
-    #   - sudo
-    #   - man
-    #   - vim
+  # vars:
+  #   instal_dir: ansible_env.HOME
 
   tasks:
-  # - name: Load vault
-  #   # include_vars: vault-example.yml
-  #   include_vars: ~/Documents/Ansible/vaults/vault-prometheus-deploy.yml
-  #   no_log: true
+  - name: Include all files in vars
+    include_vars:
+      dir: vars/
 
-  - name: Deploy Prometheus
-    include_role:
-      name:
-      - cloudalchemy.prometheus
-      - cloudalchemy.alertmanager
+  - name: Load vault
+    ### See variables in vault-example.yml
+    include_vars: ~/Documents/Ansible/vaults/vault-prometheus-deploy.yml
+    no_log: true
 
-  - name: Deploy grafana
-    hosts: grafana
-    roles:
-    - cloudalchemy.grafana
+  # - name: Deploy Prometheus
+  #   include_role:
+  #     name: cloudalchemy.prometheus
+
+          # - name: Deploy Alert Manager
+          #   include_role:
+          #     name: cloudalchemy.alertmanager
+
+  # - name: Deploy SNMP exporter
+  #   include_role:
+  #     name: cloudalchemy.snmp-exporter
+  #
+  # - name: Deploy grafana
+  #   include_role:
+  #     name: cloudalchemy.grafana
+
+  - name: Configuration for Synology
+    include_tasks: tasks/configure_syno.yml

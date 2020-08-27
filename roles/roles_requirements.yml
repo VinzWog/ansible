@@ -1,25 +1,13 @@
 ### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
 
 - name: angstwad.docker_ubuntu
-  src: git+https://github.com/angstwad/docker.ubuntu.git
-
-- name: stefangweichinger.ansible-rclone
-  src: git+https://github.com/stefangweichinger/ansible-rclone.git
-
+- name: stefangweichinger.ansible_rclone
 - name: Benaud12.docker-pi
-  src: git+https://github.com/Benaud12/docker-pi.git
-
 - name: cloudalchemy.prometheus
-  src: git+https://github.com/cloudalchemy/ansible-prometheus.git
-
-- name: cloudalchemy.ansible-node-exporter
-  src: git+https://github.com/cloudalchemy/ansible-node-exporter.git
-
+- name: cloudalchemy.alertmanager
+- name: cloudalchemy.node-exporter
+- name: cloudalchemy.snmp-exporter
+- name: cloudalchemy.grafana
 - name: dev-sec.os-hardening
-  src: git+https://github.com/dev-sec/ansible-os-hardening
-
-- name: dgeerlingguy.pip
-  src: git+https://github.com/geerlingguy/ansible-role-pip
-
+- name: geerlingguy.pip
 - name: geerlingguy.kubernetes
-  src: git+https://github.com/geerlingguy/ansible-role-kubernetes
