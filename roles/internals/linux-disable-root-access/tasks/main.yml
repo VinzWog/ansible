@@ -7,7 +7,7 @@
     dest: /etc/ssh/sshd_config
     regexp: "^PasswordAuthentication"
     line: "PasswordAuthentication no"
-    force: yes
+    # force: yes
     state: present
   become: yes
 
@@ -16,7 +16,7 @@
     dest: /etc/ssh/sshd_config
     regexp: "^PermitRootLogin"
     line: "PermitRootLogin prohibit-password"
-    force: yes
+    # force: yes
     state: present
   become: yes
   notify: Reload SSH

@@ -1,4 +1,4 @@
-### ansible-playbook playbooks/linux-setup/main.yml -i ~/Documents/Ansible/hosts --vault-password-file ~/Documents/Ansible/vault.txt --extra-vars "target=[TargetName]" -K -k
+### ansible-playbook playbooks/linux-setup/main.yml -i <host-file> --vault-password-file <vault_pass-file> --extra-vars "target=<target-name>" -K -k
 
 - name: Global Linux OS configuration
   hosts: "{{ target }}"

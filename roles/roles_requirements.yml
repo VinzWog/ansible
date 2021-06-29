@@ -1,11 +1,10 @@
 ### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
 
-- name: angstwad.docker_ubuntu
 - name: stefangweichinger.ansible_rclone
 - name: Benaud12.docker-pi
 - name: cloudalchemy.prometheus
 - name: cloudalchemy.alertmanager
-- name: cloudalchemy.node-exporter
+- name: cloudalchemy.node_exporter
 - name: cloudalchemy.snmp-exporter
 - name: cloudalchemy.grafana
 - name: dev-sec.os-hardening
