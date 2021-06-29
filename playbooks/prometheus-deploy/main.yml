@@ -1,36 +1,28 @@
-### ansible-playbook playbooks/prometheus-deploy/main.yml -i hosts --extra-vars "target=[TargetName] -k
+### ansible-playbook playbooks/prometheus-deploy/main.yml -i ~/Documents/Ansible/hosts --vault-password-file ~/Documents/Ansible/vault.txt --extra-vars "target=<target>" -K
 
 - name: Delpoy monitoring server
   hosts: "{{ target }}"
 
-  # vars:
-  #   instal_dir: ansible_env.HOME
-
   tasks:
+  - name: Load vault
+    include_vars: ~/Documents/Ansible/vaults/vault-prometheus-deploy.yml
+    no_log: true
+
   - name: Include all files in vars
     include_vars:
       dir: vars/
 
-  - name: Load vault
-    ### See variables in vault-example.yml
-    include_vars: ~/Documents/Ansible/vaults/vault-prometheus-deploy.yml
-    no_log: true
-
   # - name: Deploy Prometheus
   #   include_role:
   #     name: cloudalchemy.prometheus
-
-          # - name: Deploy Alert Manager
-          #   include_role:
-          #     name: cloudalchemy.alertmanager
-
-  # - name: Deploy SNMP exporter
-  #   include_role:
-  #     name: cloudalchemy.snmp-exporter
   #
-  # - name: Deploy grafana
+  # - name: Deploy Alert Manager
   #   include_role:
-  #     name: cloudalchemy.grafana
+  #     name: cloudalchemy.alertmanager
 
-  - name: Configuration for Synology
-    include_tasks: tasks/configure_syno.yml
+  - name: Deploy grafana
+    include_role:
+      name: cloudalchemy.grafana
+
+  # - name: Configuration for Synology
+  #   include_tasks: tasks/configure_syno.yml

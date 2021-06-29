@@ -1,0 +1,144 @@
+
+### synoSystem
+- systemStatus
+- temperature
+- powerStatus
+- systemFanStatus
+- cpuFanStatus
+- modelName
+- serialNumber
+- version
+- upgradeAvailable
+- localRelayNode
+
+### synoDisk
+- diskIndex
+- diskID
+- diskModel
+- diskType
+- diskStatus
+- diskTemperature
+
+### synoRaid
+- raidIndex
+- raidName
+- raidStatus
+- raidFreeSize
+- raidTotalSize
+
+### synoUPS
+- upsDeviceModel
+- upsDeviceManufacturer
+- upsDeviceSerial
+- upsInfoStatus
+- upsInfoMfrDate
+- upsInfoLoadValue
+- upsBatteryChargeValue
+- upsBatteryChargeWarning
+- upsBatteryType
+
+### synologyDiskSMART
+- diskSMARTInfoIndex
+- diskSMARTInfoDevName
+- diskSMARTAttrName
+- diskSMARTAttrId
+- diskSMARTAttrCurrent
+- diskSMARTAttrWorst
+- diskSMARTAttrThreshold
+- diskSMARTAttrRaw
+- diskSMARTAttrStatus
+
+### synologyService
+- serviceInfoIndex
+- serviceName
+- serviceUsers
+
+### storageIO
+- storageIOIndex
+- storageIODevice
+- storageIONRead
+- storageIONWritten
+- storageIOReads
+- storageIOWrites
+- storageIOLA
+- storageIOLA1
+- storageIOLA5
+- storageIOLA15
+- storageIONReadX
+- storageIONWrittenX
+- storageIODeviceSerial
+
+### spaceIO
+- spaceIOIndex
+- spaceIODevice
+- spaceIONRead
+- spaceIONWritten
+- spaceIOReads
+- spaceIOWrites
+- spaceIOLA
+- spaceIOLA1
+- spaceIOLA5
+- spaceIOLA15
+- spaceIONReadX
+- spaceIONWrittenX
+- spaceUUID
+
+### flashCache
+- flashCacheIndex
+- flashCacheSSDDev
+- flashCacheSpaceDev
+- flashCacheReadHits
+- flashCacheWriteHits
+- flashCacheDiskRead
+- flashCacheDiskWrite
+- flashCacheTotalRead
+- flashCacheTotalWrite
+- flashCacheReadHitRate
+- flashCacheWriteHitRate
+- flashCacheReadSeqSkip
+- flashCacheWriteSeqSkip
+- flashCacheWriteMissSsd
+- flashCacheSsdUuid
+
+### synologyiSCSILUN
+- iSCSILUNInfoIndex
+- iSCSILUNUUID
+- iSCSILUNName
+- iSCSILUNThroughputReadHigh
+- iSCSILUNThroughputReadLow
+- iSCSILUNThroughputWriteHigh
+- iSCSILUNThroughputWriteLow
+- iSCSILUNIopsRead
+- iSCSILUNIopsWrite
+- iSCSILUNDiskLatencyRead
+- iSCSILUNDiskLatencyWrite
+- iSCSILUNNetworkLatencyTx
+- iSCSILUNNetworkLatencyRx
+- iSCSILUNIoSizeRead
+- iSCSILUNIoSizeWrite
+- iSCSILUNQueueDepth
+- iSCSILUNType
+
+### synologyEbox
+- eboxIndex
+- eboxModel
+- eboxPower
+- eboxRedundantPower
+
+### synologyHA
+- activeNodeName
+- passiveNodeName
+- clusterAutoFailover
+- clusterName
+- clusterStatus
+- heartbeatStatus
+- heartbeatTxRate
+- heartbeatLatency
+
+### GpuInfo
+- gpuInfoSupported
+- gpuUtilization
+- gpuMemoryUtilization
+- gpuMemoryFree
+- gpuMemoryUsed
+- gpuMemoryTotal

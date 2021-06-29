@@ -1,0 +1,41 @@
+---
+- name: Install unzip
+  package:
+    name:
+      - unzip
+      - build-essential
+      - libsnmp-dev
+      - snmp-mibs-downloader
+      - golang-go
+    state: latest
+  become: yes
+
+- name: Download Synology MIBs
+  unarchive:
+    src: https://global.download.synology.com/download/Document/Software/DeveloperGuide/Firmware/DSM/All/enu/Synology_MIB_File.zip
+    dest: /var/lib/snmp/mibs/
+    remote_src: yes
+  become: yes
+
+- name : Get SNMP generator
+  shell: go get github.com/prometheus/snmp_exporter/generator
+
+- name : SNMP generator
+  shell: go build -o ~/snmp_exporter/generator
+  args:
+    chdir: ~/go/src/github.com/prometheus/snmp_exporter/generator
+
+- name: Cleaning source files
+  file:
+    path: ~/go/
+    state: absent
+
+- name: Copy generator.yml
+  template:
+    src: files/generator.yml
+    dest: ~/snmp_exporter/generator.yml
+
+- name : Run SNMP generator
+  shell: export MIBDIRS="/var/lib/snmp/mibs/" && ./generator generate
+  args:
+    chdir: ~/snmp_exporter/

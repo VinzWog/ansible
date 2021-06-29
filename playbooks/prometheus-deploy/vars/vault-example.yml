@@ -1,4 +1,4 @@
-### deploy-prometheus - Vault's variables example list
----
-# ### configure-system
-# SSH_PORT: ssh-custom-port
+#Vault's variables example list
+grafana_security:
+  admin_password: <existing_or_to_be_used_for_creation>
+  admin_user: <existing_or_to_be_used_for_creation>
