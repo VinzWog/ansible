@@ -10,3 +10,4 @@
 - name: dev-sec.os-hardening
 - name: geerlingguy.pip
 - name: geerlingguy.kubernetes
+- name: geerlingguy.docker
