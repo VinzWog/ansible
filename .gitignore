@@ -5,6 +5,7 @@
 *.inv*
 *.inv
 roles/externals/*
+collections/*
 oauth*
 *.db
 deprecated/
