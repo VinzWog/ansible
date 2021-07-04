@@ -3,13 +3,12 @@
 # GCP_AUTH_FILE:
 # GCP_PROJECT:
 
-INVENTORY_DIR: ../../inventories/gcp-image_creation/dynamic
+INVENTORY_DIR: /ansible/inventories/
 
 ## Environnement settings for default
 GCP_REGION: australia-southeast1
 GCP_ZONE: australia-southeast1-b
 GCP_AUTH_KIND: serviceaccount
-gcp_cred_file:
 
 # Vars for gcp-create-instance.yml tasks
 GCP_INSTANCE_NAME: alfred
