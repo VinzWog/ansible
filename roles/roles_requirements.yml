@@ -1,5 +1,5 @@
 ### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
-### ansible-galaxy collection install -r ./roles/roles_requirements.yml
+### ansible-galaxy collection install -r ./roles/roles_requirements.yml -p ./
 
 ---
 roles:
