@@ -1,4 +1,4 @@
-FROM cytopia/ansible:2.8-tools
+FROM cytopia/ansible:2.10-tools
 
 RUN set -eux \
 	&& pip3 install --no-cache-dir \
