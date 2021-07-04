@@ -1,5 +1,5 @@
 ---
-PLEXDRIVE_VERSION: 5.0.0
+PLEXDRIVE_VERSION: 5.1.0
 PLEXDRIVE_DL_URL: "https://github.com/dweidenfeld/plexdrive/releases/download/{{ PLEXDRIVE_VERSION }}/plexdrive-linux-amd64"
 PLEXDRIVE_CONF_SOURCE: ~/Documents/Plexdrive/plexdrive-conf.tar.gz
 PLEXDRIVE_INSTALL_PATH: /root/plexdrive
