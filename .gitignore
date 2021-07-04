@@ -5,7 +5,7 @@
 *.inv*
 *.inv
 roles/externals/*
-collections/*
+ansible_collections/*
 oauth*
 *.db
 deprecated/
