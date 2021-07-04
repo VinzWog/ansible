@@ -1,13 +1,19 @@
 ### ansible-galaxy install -r ./roles/roles_requirements.yml -p ./roles/externals/
+### ansible-galaxy collection install -r ./roles/roles_requirements.yml
 
-- name: stefangweichinger.ansible_rclone
-- name: Benaud12.docker-pi
-- name: cloudalchemy.prometheus
-- name: cloudalchemy.alertmanager
-- name: cloudalchemy.node_exporter
-- name: cloudalchemy.snmp-exporter
-- name: cloudalchemy.grafana
-- name: dev-sec.os-hardening
-- name: geerlingguy.pip
-- name: geerlingguy.kubernetes
-- name: geerlingguy.docker
+---
+roles:
+  - name: stefangweichinger.ansible_rclone
+  - name: Benaud12.docker-pi
+  - name: cloudalchemy.prometheus
+  - name: cloudalchemy.alertmanager
+  - name: cloudalchemy.node_exporter
+  - name: cloudalchemy.snmp-exporter
+  - name: cloudalchemy.grafana
+  - name: geerlingguy.pip
+  - name: geerlingguy.kubernetes
+  - name: geerlingguy.docker
+
+collections:
+  - name: devsec.hardening
+    source: https://galaxy.ansible.com
