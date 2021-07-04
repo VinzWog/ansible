@@ -1,0 +1,19 @@
+## Vault variables
+# GCP_SERVICE_ACCOUNT_EMAIL:
+# GCP_AUTH_FILE:
+# GCP_PROJECT:
+
+INVENTORY_DIR: ../../inventories/gcp-image_creation/dynamic
+
+## Environnement settings for default
+GCP_REGION: australia-southeast1
+GCP_ZONE: australia-southeast1-b
+GCP_AUTH_KIND: serviceaccount
+gcp_cred_file:
+
+# Vars for gcp-create-instance.yml tasks
+GCP_INSTANCE_NAME: alfred
+GCP_INSTANCE_TYPE: n1-standard-2
+GCP_IMAGE_URI: projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20210623
+GCP_DISK_NAME: ssd-alfred
+GCP_INSTANCE_DISK_SIZE_GB: 50

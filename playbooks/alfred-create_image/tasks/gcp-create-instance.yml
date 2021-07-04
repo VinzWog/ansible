@@ -1,0 +1,71 @@
+---
+- name: Create SSD
+  gcp_compute_disk:
+     auth_kind: "{{ GCP_AUTH_KIND }}"
+     service_account_file: "{{ GCP_AUTH_FILE }}"
+     name: '{{ GCP_DISK_NAME }}'
+     size_gb: "{{ GCP_INSTANCE_DISK_SIZE_GB }}"
+     source_image: "{{ GCP_IMAGE_URI }}"
+     zone: "{{ GCP_ZONE }}"
+     project: "{{ GCP_PROJECT }}"
+     scopes:
+       - https://www.googleapis.com/auth/compute
+     state: present
+  register: disk
+
+- name: Create IP address
+  gcp_compute_address:
+     auth_kind: "{{ GCP_AUTH_KIND }}"
+     service_account_file: "{{ GCP_AUTH_FILE }}"
+     name: "{{ GCP_INSTANCE_NAME }}"
+     region: "{{ GCP_REGION }}"
+     project: "{{ GCP_PROJECT }}"
+     scopes:
+       - https://www.googleapis.com/auth/compute
+     state: present
+  register: ip
+
+- name: Provision Compute Instance
+  gcp_compute_instance:
+     state: present
+     auth_kind: "{{ GCP_AUTH_KIND }}"
+     service_account_file: "{{ GCP_AUTH_FILE }}"
+     name: "{{ GCP_INSTANCE_NAME }}"
+     machine_type: "{{ GCP_INSTANCE_TYPE }}"
+     disks:
+       - auto_delete: false
+         boot: true
+         source: "{{ disk }}"
+     network_interfaces:
+         - network: null # use default
+           access_configs:
+             - name: 'External NAT'
+               nat_ip: "{{ ip }}"
+               type: 'ONE_TO_ONE_NAT'
+     zone: "{{ GCP_ZONE }}"
+     project: "{{ GCP_PROJECT }}"
+     scopes:
+       - https://www.googleapis.com/auth/compute
+  register: instance
+
+### debug
+# - name: Display Instance Data
+#   debug:
+#     msg: "{{ item }}"
+#   with_items:
+    # - "{{ instance }}"
+    # - "{{ ip }}"
+    # - "{{ disk }}"
+    # - "{{ instance.networkInterfaces[0].accessConfigs[0].natIP }}"
+
+- name: Wait for SSH to come up
+  wait_for: host={{ ip.address }} port=22 delay=2 timeout=60
+
+- name: Register instance
+  add_host:
+    hostname: "{{ ip.address }}"
+    groups: just_created
+    ansible_connection: ssh
+    ansible_user: vinz
+    ansible_ssh_private_key_file: /home/ansible/.ssh/id_rsa
+    ansible_python_interpreter: /usr/bin/python3
