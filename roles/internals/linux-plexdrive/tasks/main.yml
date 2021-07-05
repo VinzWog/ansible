@@ -31,7 +31,6 @@
 
 - name: Extract plexdrive configuration
   unarchive:
-    remote_src: no
     src: "{{ PLEX_CONF_ARCHIVE }}"
     dest: "{{ PLEXDRIVE_CONF_PATH }}"
 
