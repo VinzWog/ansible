@@ -80,9 +80,3 @@
   set_fact:
     USER_ID: getent_passwd.{{ GCP_INSTANCE_USER }}[1]
     GROUP_ID: getent_passwd.{{ GCP_INSTANCE_USER }}[2]
-
-- debug:
-    var: "{{ USER_ID }}"
-
-- debug:
-    var: "{{ GROUP_ID }}"
