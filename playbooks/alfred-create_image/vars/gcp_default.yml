@@ -11,6 +11,7 @@ GCP_ZONE: australia-southeast1-b
 GCP_AUTH_KIND: serviceaccount
 
 # Vars for gcp-create-instance.yml tasks
+GCP_INSTANCE_USER: vinz
 GCP_INSTANCE_NAME: alfred
 GCP_INSTANCE_TYPE: n1-standard-2
 GCP_IMAGE_URI: projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20210623

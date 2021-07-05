@@ -66,6 +66,23 @@
     hostname: "{{ ip.address }}"
     groups: just_created
     ansible_connection: ssh
-    ansible_user: vinz
+    ansible_user: "{{ GCP_INSTANCE_USER }}"
     ansible_ssh_private_key_file: /home/ansible/.ssh/id_rsa
     ansible_python_interpreter: /usr/bin/python3
+
+- name: Collect user info
+  delegate_to: "{{ ip.address }}"
+  getent:
+    database: passwd
+    key: "{{ GCP_INSTANCE_USER }}"
+
+- name: Set user and group variables
+  set_fact:
+    USER_ID: getent_passwd.{{ GCP_INSTANCE_USER }}[1]
+    GROUP_ID: getent_passwd.{{ GCP_INSTANCE_USER }}[2]
+
+- debug:
+    var: "{{ USER_ID }}"
+
+- debug:
+    var: "{{ GROUP_ID }}"
