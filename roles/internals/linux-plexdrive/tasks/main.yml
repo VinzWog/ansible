@@ -32,7 +32,7 @@
 - name: Extract plexdrive configuration
   unarchive:
     remote_src: no
-    src: "{{ PLEXDRIVE_CONF_SOURCE }}"
+    src: "{{ PLEX_CONF_ARCHIVE }}"
     dest: "{{ PLEXDRIVE_CONF_PATH }}"
 
 - name: Configure auto launch on Debian

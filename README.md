@@ -26,7 +26,7 @@ docker run --rm \
   -e "ANSIBLE_HOST_KEY_CHECKING=false" \
   -e "ANSIBLE_RETRY_FILES_ENABLED=false" \
   -e "ANSIBLE_FORCE_COLOR=true" \
-  ### Mitogen acivation - Does not support collections yet
+  ### Mitogen acivation /!\ Does not support collections yet
   -e "ANSIBLE_STRATEGY=mitogen_linear" \
   -e "ANSIBLE_STRATEGY_PLUGINS=/usr/lib/python3.8/site-packages/ansible_mitogen/plugins/strategy" \
   m4vr0x/wognet-ansible

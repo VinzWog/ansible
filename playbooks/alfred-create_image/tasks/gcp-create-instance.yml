@@ -75,8 +75,3 @@
   getent:
     database: passwd
     key: "{{ GCP_INSTANCE_USER }}"
-
-- name: Set user and group variables
-  set_fact:
-    USER_ID: getent_passwd.{{ GCP_INSTANCE_USER }}[1]
-    GROUP_ID: getent_passwd.{{ GCP_INSTANCE_USER }}[2]
