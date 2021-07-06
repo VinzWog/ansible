@@ -8,7 +8,11 @@ After=network-online.target
 Type=simple
 User=root
 Group=root
-ExecStart={{ PLEXDRIVE_BIN_PATH }}/plexdrive mount -c {{ PLEXDRIVE_CONF_PATH }}/conf/ -o allow_other read_only -v 2 {{ PLEXDRIVE_MOUNT_POINT }}
+ExecStart={{ PLEXDRIVE_BIN_PATH }}/plexdrive mount \
+-c {{ PLEXDRIVE_CONF_PATH }}/conf/ \
+-o allow_other,read_only \
+-v 3 \
+{{ PLEXDRIVE_MOUNT_POINT }}
 ExecStop=/bin/fusermount -uz {{ PLEXDRIVE_MOUNT_POINT }}
 Restart=on-abort
 
