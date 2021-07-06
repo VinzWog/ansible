@@ -3,7 +3,7 @@
   template:
     src: tpl_plexdrive-mount_service-debian
     dest: "/etc/systemd/system/plexdrive.service"
-    mode: 0755
+    mode: 0644
     owner: root
     group: root
   become: yes
