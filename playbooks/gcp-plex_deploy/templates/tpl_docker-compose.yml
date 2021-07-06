@@ -1,0 +1,18 @@
+---
+version: "3"
+services:
+######### Plex
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker:latest
+    restart: unless-stopped
+    environment:
+      - PLEX_UID="{{ USER_ID }}"
+      - PLEX_GID="{{ GROUP_ID }}"
+#      ### Get a PlexClaim here : https://plex.tv/claim
+      - PLEX_CLAIM="{{ PLEX_CLAIM }}"
+    network_mode: host
+    volumes:
+      - "{{ PLEX_DOCKER_PATH }}:/config"
+      - "{{ PLEX_DOCKER_PATH }}/transcode:/transcode"
+      - "{{ PLEXDRIVE_MOUNT_POINT }}/Hulk:/Hulk"

@@ -1,0 +1,44 @@
+---
+- name: Copy Docker Compose file
+  template:
+    src: tpl_docker-compose.yml
+    dest: "/home/{{ GCP_INSTANCE_USER }}/docker-compose.yml"
+
+- name: Create Plex directory for docker
+  file:
+    path: "{{ PLEX_DOCKER_PATH }}"
+    state: directory
+    owner: "{{ GCP_INSTANCE_USER }}"
+  become: yes
+
+- name: Extract Plex Library... be patient
+  unarchive:
+    remote_src: yes
+    src: "{{ PLEX_CONF_ARCHIVE }}"
+    dest: "{{ PLEX_DOCKER_PATH }}"
+
+- name: Change ownership of Plex directory
+  # Cannot use file module because of bug "OSError: [Errno 36] File name too long"
+  raw: chown "{{ GCP_INSTANCE_USER }}":"{{ GCP_INSTANCE_USER }}" -R "{{ PLEX_DOCKER_PATH }}"
+  become: yes
+
+- name: Delete Plex preferences file
+  ansible.builtin.file:
+    path: "{{ PLEX_DOCKER_PATH }}/Library/Application Support/Plex Media Server/Preferences.xml"
+    state: absent
+
+- name: Open port for Plex
+  delegate_to: localhost
+  gcp_compute_firewall:
+    name: plex
+    allowed:
+      - ip_protocol: 'tcp'
+        ports:
+          - "32400"
+    target_tags: plex
+    project: "{{ GCP_PROJECT }}"
+    scopes:
+      - https://www.googleapis.com/auth/compute
+    auth_kind: "{{ GCP_AUTH_KIND }}"
+    service_account_file: "{{ GCP_AUTH_FILE }}"
+    state: present

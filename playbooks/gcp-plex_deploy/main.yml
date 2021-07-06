@@ -1,0 +1,87 @@
+### ansible-docker ansible-playbook /github/playbooks/gcp-plex_deploy/main.yml -i /ansible/hosts --vault-password-file /ansible/vault.txt --extra-vars "VAULT_PATH=/ansible/vaults/vault-quasar.yml"
+
+---
+- name: Create GCP instance
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars/vision_default.yml
+  tasks:
+    - name: Load vault
+      include_vars: "{{ VAULT_PATH }}"
+      no_log: true
+
+    - name: Provision Instance
+      include_tasks: tasks/gcp-create-instance.yml
+
+- name: Install Docker and Python libs
+  hosts: vision
+  vars_files: vars/vision_default.yml
+  vars:
+    pip_package: python3-pip
+    pip_install_packages:
+      - docker
+      - docker-compose
+    docker_users: "{{ GCP_INSTANCE_USER }}"
+  pre_tasks:
+    - name: Update apt cache.
+      apt: update_cache=true cache_valid_time=600
+      when: ansible_os_family == 'Debian'
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+  become: yes
+
+- name: Instance setup
+  hosts: vision
+  vars:
+    USER_ID: hostvars['localhost']['getent_passwd']['{{ GCP_INSTANCE_USER }}'][1]
+    GROUP_ID: hostvars['localhost']['getent_passwd']['{{ GCP_INSTANCE_USER }}'][2]
+  tasks:
+    - name: Load variables file
+      include_vars:
+        file: vars/vision_default.yml
+
+    - name: Install prerequesites
+      ansible.builtin.package:
+        name:
+          - unzip
+        state: present
+      become: yes
+
+    - name: Instance OS hardening
+      include_role:
+        name: devsec.hardening.os_hardening
+        apply:
+          become: yes
+      vars:
+        os_auth_pw_max_age: 99999
+        os_auth_timeout: 120
+        os_auth_pam_passwdqc_enable: false
+        ufw_manage_defaults: false
+        sysctl_overwrite:
+          # Enable IPv4 traffic forwarding (required for Docker/K8s)
+          net.ipv4.ip_forward: 1
+
+    - name: PlexDrive installation
+      include_role:
+        name: linux-plexdrive
+        apply:
+          become: yes
+
+    - name: Load vault
+      include_vars: "{{ VAULT_PATH }}"
+      no_log: true
+
+    - name: Plex deployment
+      include_tasks: tasks/deploy_plex.yml
+
+#     - name: Spin up docker-compose.yml
+#       community.docker.docker_compose:
+#         project_src: "/home/{{ GCP_INSTANCE_USER }}/"
+#
+# - name: Create GCP Image
+#   hosts: localhost
+#   connection: local
+#   gather_facts: False
+#   tasks:
+#     - include_tasks: tasks/gcp-create-image.yml
